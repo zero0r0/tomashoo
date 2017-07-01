@@ -1,10 +1,11 @@
 #pragma once
 
 #define MAX_TOMATO 255
+#define STAGE_NUM 2
 
 /*オブジェクト系*/
 typedef struct {
-	int graphic;			//プレイヤー画像
+	int graphic[2];			//プレイヤー画像
 	int x, y;				//xy座標
 	int x_size, y_size;		//x.y大きさ
 	int life;				//ライフ
@@ -40,7 +41,12 @@ extern Shot shot[MAX_TOMATO];
 
 /*グラフィック系*/
 extern int shot_graphic;
-extern int tomato_grahic;
+extern int tomato_graphic;
+extern int speed_meter_graphic;
+extern int backbround_graphic[STAGE_NUM];
+extern int karasu_graphic;
+
+
 
 /*「mode」
 ゲームには、タイトル画面、メイン画面（ゲーム画面）、ゲームオーバー画面など、さまざまな画面がある。

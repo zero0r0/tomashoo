@@ -7,7 +7,7 @@
 
 
 void TestMessage();		//関数のプロトタイプ宣言
-void LoadGraphic();
+void LoadGraphicAll();
 
 Player player;
 Shot shot[MAX_TOMATO];
@@ -20,6 +20,9 @@ int const GAMEOVER = 2;
 //グラフィック系
 int shot_graphic;
 int tomato_graphic;
+int speed_meter_graphic;
+int backbround_graphic[STAGE_NUM];
+int karasu_graphic;
 
 int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 
@@ -255,14 +258,16 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 	return 0;
 }
 
-void LoadGraphic() {
-	player.graphic = LoadGraph("Data/player.bmp");
+void LoadGraphicAll() {
+	LoadDivGraph("Data/pc01.png",2,2,1,48,48, player.graphic);
 	player.life_graphic = LoadGraph("Data/life.bmp");
+	tomato_graphic = LoadGraph("Data/tomato.png");
 
 }
 
 void DeleteGraphicAll() {
-	DeleteGraph(player.graphic);
+	DeleteGraph(player.graphic[0]);
+	DeleteGraph(player.graphic[1]);
 	DeleteGraph(player.life_graphic);
 }
 

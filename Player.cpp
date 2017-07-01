@@ -5,13 +5,19 @@
 //プレイヤーの初期化の関数
 //位置、所持トマトなどを初期化する
 void PlayerInit() {
-
+	player.x = 320;
+	player.y = 400;
+	player.life = 5;
+	player.safetime = 0;
+	player.tomato = 50;
 }
 
 //プレイヤー更新関数
 //プレイヤーの動作で追加がある場合ここに書いていく
 void PlayerUpdate() {
 	
+
+
 	PlayerMovement();
 	//トリガーを-1する
 	player.shot_trigger--;
@@ -26,10 +32,11 @@ void PlayerDraw() {
 	/*	player_safetimeを2で割った余りを算出し、それが0ならば描画するようにする
 	すると、セーフタイム中はプレイヤーが点滅するようになる
 	*/
-	//if (player.safetime % 2 == 0)
+	if (player.safetime % 2 == 0)
 		DrawGraph(player.x, player.y, player.graphic, TRUE);
 }
 
+///
 void PlayerMovement() {
 	//キーが押されていたらプレイヤーを移動させる
 	if (key_up > 0)		player.y -= 4;
