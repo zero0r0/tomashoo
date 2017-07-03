@@ -8,9 +8,13 @@
 
 void TestMessage();		//関数のプロトタイプ宣言
 void LoadGraphicAll();
+void DeleteGraphicAll();
+
 
 Player player;
 Shot shot[MAX_TOMATO];
+Item item[MAX_TOMATO];
+Karasu karasu[MAX_KARASU];
 
 int mode;
 int const TITLE = 0;
@@ -22,7 +26,6 @@ int shot_graphic;
 int tomato_graphic;
 int speed_meter_graphic;
 int backbround_graphic[STAGE_NUM];
-int karasu_graphic;
 
 int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 
@@ -61,6 +64,8 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 		fread(&max_score, sizeof(int), 1, rf);
 		fclose(rf);	//ファイルを閉じる
 	}
+	
+	LoadGraphicAll();
 
 	mode = TITLE;
 	TitleInit();
@@ -253,24 +258,35 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 
 		ScreenFlip();
 	}
-
+	DeleteGraphicAll();
 	DxLib_End();
 	return 0;
 }
 
 void LoadGraphicAll() {
 	LoadDivGraph("Data/pc01.png",2,2,1,48,48, player.graphic);
+	for (int i = 0; i < MAX_KARASU; i++) {
+		LoadDivGraph("Data/en01.png", 2, 2, 1, 48, 48, karasu[i].graphic);
+	}
 	player.life_graphic = LoadGraph("Data/life.bmp");
 	tomato_graphic = LoadGraph("Data/tomato.png");
-
+	backbround_graphic[0] = LoadGraph("Data/inaka.png");
+	backbround_graphic[1] = LoadGraph("Data/hatake.png");
 }
 
 void DeleteGraphicAll() {
 	DeleteGraph(player.graphic[0]);
 	DeleteGraph(player.graphic[1]);
 	DeleteGraph(player.life_graphic);
+	DeleteGraph(tomato_graphic);
+	DeleteGraph(backbround_graphic[0]);
+	DeleteGraph(backbround_graphic[1]);
+	for (int i = 0; i < MAX_KARASU; i++) {
+		DeleteGraph(karasu[i].graphic[0]);
+		DeleteGraph(karasu[i].graphic[1]);
+	}
 }
 
 void TestMessage() {
-	DrawString(0, 0, "Shooting Game!!", GetColor(255, 255, 255));
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "変数 mode の値は %d です", mode);
 }

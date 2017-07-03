@@ -6,9 +6,12 @@
 //位置、所持トマトなどを初期化する
 void PlayerInit() {
 	player.x = 320;
-	player.y = 400;
-	player.life = 5;
-	player.safetime = 0;
+	player.y = 220;
+	player.x_size = 48;
+	player.y_size = 48;
+	player.life = 3;
+	player.safetime = 10;
+	player.shot_trigger = 10;
 	player.tomato = 50;
 }
 
@@ -17,14 +20,16 @@ void PlayerInit() {
 void PlayerUpdate() {
 	
 
-
 	PlayerMovement();
+	PlayerCollision();
 	//トリガーを-1する
 	player.shot_trigger--;
 	//Zキーが押されていて、かつトリガーが0以下だったら弾丸を発射する
 	if (key_z > 0 && player.shot_trigger <= 0) {
 		PlayerShot();
+		player.tomato -= 1;
 	}
+	DrawFormatString(300, 300, GetColor(255, 255, 255), "life の値は %d です", player.life);
 }
 
 //プレイヤーを描画
@@ -32,8 +37,8 @@ void PlayerDraw() {
 	/*	player_safetimeを2で割った余りを算出し、それが0ならば描画するようにする
 	すると、セーフタイム中はプレイヤーが点滅するようになる
 	*/
-	if (player.safetime % 2 == 0)
-		DrawGraph(player.x, player.y, player.graphic, TRUE);
+	//if (player.safetime % 2 == 0)
+	DrawGraph(player.x, player.y, player.graphic[0], TRUE);
 }
 
 ///
@@ -64,6 +69,31 @@ void PlayerShot() {
 			//トリガーを設定
 			player.shot_trigger = 10;
 			break;		//ループから脱出
+		}
+	}
+}
+
+void PlayerCollision() {
+	//for (int i = 0; i < MAX_TOMATO; i++) {
+	//if (item[i].x <= player.x + player.x_size && item[i].x + item[i].x_size >= player.x) {
+	//	if (item[i].y <= player.y + player.y_size && item[i].y + item[i].y_size[i] >= player.y) {
+	//		player.tomato += 5;
+	//		}
+	//	}	
+	//}
+	if (player.safetime > 0)
+		player.safetime--;
+	else {
+		for (int i = 0; i < MAX_KARASU; i++) {
+			if (karasu[i].x <= player.x + player.x_size && karasu[i].x + karasu[i].x_size >= player.x) {
+				if (karasu[i].y <= player.y + player.y_size && karasu[i].y + karasu[i].y_size >= player.y) {
+					player.life -= 1;
+					player.safetime = 60;
+					if (player.life == 0) {
+						mode = GAMEOVER;
+					}
+				}
+			}
 		}
 	}
 }

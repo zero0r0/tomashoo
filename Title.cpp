@@ -14,6 +14,7 @@ void TitleUpdata() {
 		mode = MAIN;
 		MainGameInit();
 	}
+
 }
 
 //ƒ^ƒCƒgƒ‹‚Å‚Ì•`‰æˆ—

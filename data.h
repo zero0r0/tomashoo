@@ -1,6 +1,7 @@
 #pragma once
 
 #define MAX_TOMATO 255
+#define MAX_KARASU 1
 #define STAGE_NUM 2
 
 /*オブジェクト系*/
@@ -21,11 +22,31 @@ typedef struct {
 	int x_size, y_size;		//x.y大きさ
 }Shot;
 
+typedef struct {
+	int graphic[2];
+	int x, y;
+	int x_size, y_size;
+}Karasu;
+
+typedef struct {
+	int x, y;
+	int x_size, y_size;
+}Item;
+
+
 void PlayerInit();
 void PlayerUpdate();
 void PlayerDraw();
 void PlayerMovement();
 void PlayerShot();
+void PlayerCollision();
+
+void KarasuInit();
+void KarasuUpdate();
+void KarasuDraw();
+
+void ShotInit();
+void ShotUpdate();
 
 void TitleInit();
 void TitleUpdata();
@@ -35,16 +56,17 @@ void MainGameInit();
 void MainGameUpdate();
 void MainGameDraw();
 
-
 extern Player player;
 extern Shot shot[MAX_TOMATO];
+extern Item item[MAX_TOMATO];
+extern Karasu karasu[MAX_KARASU];
 
 /*グラフィック系*/
 extern int shot_graphic;
 extern int tomato_graphic;
 extern int speed_meter_graphic;
 extern int backbround_graphic[STAGE_NUM];
-extern int karasu_graphic;
+//extern int karasu_graphic;
 
 
 
