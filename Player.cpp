@@ -2,17 +2,20 @@
 #include "data.h"
 #include "Key.h"
 
+#define PI    3.1415926535897932384626433832795f
+
 //プレイヤーの初期化の関数
 //位置、所持トマトなどを初期化する
 void PlayerInit() {
 	player.x = 320;
-	player.y = 220;
+	player.y = 320;
 	player.x_size = 48;
 	player.y_size = 48;
 	player.life = 3;
 	player.safetime = 10;
 	player.shot_trigger = 10;
 	player.tomato = 50;
+	player.speed = 5;
 }
 
 //プレイヤー更新関数
@@ -29,7 +32,13 @@ void PlayerUpdate() {
 		PlayerShot();
 		player.tomato -= 1;
 	}
-	DrawFormatString(300, 300, GetColor(255, 255, 255), "life の値は %d です", player.life);
+	if (key_up == 1) {
+		PlayerSpeedUp();
+	}
+	else if(key_down == 1 && player.speed >= 1){
+		PlayerSpeedDown();
+	}
+	//DrawFormatString(300, 300, GetColor(255, 255, 255), "life の値は %d です", player.life);
 }
 
 //プレイヤーを描画
@@ -37,15 +46,18 @@ void PlayerDraw() {
 	/*	player_safetimeを2で割った余りを算出し、それが0ならば描画するようにする
 	すると、セーフタイム中はプレイヤーが点滅するようになる
 	*/
-	//if (player.safetime % 2 == 0)
-	DrawGraph(player.x, player.y, player.graphic[0], TRUE);
+	if (player.safetime % 2 == 0)
+		DrawGraph(player.x, player.y, player.graphic[0], TRUE);
+	
+	DrawGraph(220, 450, speed_meter_graphic, TRUE);
+	DrawRotaGraph2(220, 450, 20, 40, 1.0, (PI * (double)(player.speed / 10.0) - PI/2), speed_needle_graphic, TRUE);
 }
 
 ///
 void PlayerMovement() {
 	//キーが押されていたらプレイヤーを移動させる
-	if (key_up > 0)		player.y -= 4;
-	if (key_down > 0)	player.y += 4;
+	//if (key_up > 0)		player.y -= 4;
+	//if (key_down > 0)	player.y += 4;
 	if (key_left > 0)	player.x -= 4;
 	if (key_right > 0)	player.x += 4;
 	//プレイヤーが画面外に出ないようにする
@@ -96,4 +108,12 @@ void PlayerCollision() {
 			}
 		}
 	}
+}
+
+void PlayerSpeedUp() {
+	player.speed += 1;
+}
+
+void PlayerSpeedDown() {
+	player.speed -= 1;
 }

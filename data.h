@@ -14,6 +14,7 @@ typedef struct {
 	int safetime;			//無敵時間
 	int shot_trigger;		//ショットのインターバル
 	int tomato;				//所持トマト数
+	int speed;
 }Player;
 
 typedef struct {
@@ -23,15 +24,24 @@ typedef struct {
 }Shot;
 
 typedef struct {
+	bool is_dead;
 	int graphic[2];
-	int x, y;
+	int start_x, start_y;		//スタートするポジション
+	int x, y;					
 	int x_size, y_size;
-}Karasu;
+}Enemy;
 
 typedef struct {
 	int x, y;
 	int x_size, y_size;
 }Item;
+
+typedef struct {
+	int x, y;
+	int x_size, y_size;
+	int graphic;
+	int loopNum;	//ループ回数
+}Background;
 
 
 void PlayerInit();
@@ -40,13 +50,19 @@ void PlayerDraw();
 void PlayerMovement();
 void PlayerShot();
 void PlayerCollision();
+void PlayerSpeedUp();
+void PlayerSpeedDown();
 
-void KarasuInit();
-void KarasuUpdate();
-void KarasuDraw();
+void EnemyInit();
+void EnemyUpdate();
+void EnemyDraw();
 
 void ShotInit();
 void ShotUpdate();
+
+void BackgroundInit();
+void BackgroundUpdate();
+void BackgroundDraw();
 
 void TitleInit();
 void TitleUpdata();
@@ -56,16 +72,22 @@ void MainGameInit();
 void MainGameUpdate();
 void MainGameDraw();
 
+//int Lerp(int,int,int,int,int);
+
 extern Player player;
 extern Shot shot[MAX_TOMATO];
 extern Item item[MAX_TOMATO];
-extern Karasu karasu[MAX_KARASU];
+extern Enemy karasu[MAX_KARASU];
+extern Background background[STAGE_NUM];
+
 
 /*グラフィック系*/
 extern int shot_graphic;
 extern int tomato_graphic;
 extern int speed_meter_graphic;
-extern int backbround_graphic[STAGE_NUM];
+extern int speed_needle_graphic;
+
+//extern int backbround_graphic[STAGE_NUM];
 //extern int karasu_graphic;
 
 

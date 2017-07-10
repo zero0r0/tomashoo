@@ -7,19 +7,22 @@
 //ƒƒCƒ“ƒQ[ƒ€n‚Ü‚é‚Æ‚«‚É‚·‚é‰Šú‰»
 void MainGameInit() {
 	PlayerInit();
-	KarasuInit();
+	EnemyInit();
 	ShotInit();
+	BackgroundInit();
 }
 
 void MainGameUpdate() {
 	PlayerUpdate();
-	KarasuUpdate();
+	EnemyUpdate();
 	ShotUpdate();
+	BackgroundUpdate();
 }
 
 void MainGameDraw() {
+	BackgroundDraw();
 	PlayerDraw();
-	KarasuDraw();
+	EnemyDraw();
 	for (int i = 0; i < MAX_TOMATO; i++) {
 		if (shot[i].life > 0) {
 			DrawGraph(shot[i].x, shot[i].y, tomato_graphic, true);

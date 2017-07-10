@@ -19,4 +19,12 @@ void ShotUpdate() {
 				shot[i].life = 0;
 		}
 	}
+	
+	for (int i = 0; i < MAX_KARASU; i++) {
+		if (karasu[i].x <= shot[i].x + shot[i].x_size && karasu[i].x + karasu[i].x_size >= shot[i].x) {
+			if (karasu[i].y <= shot[i].y + shot[i].y_size && karasu[i].y + karasu[i].y_size >= shot[i].y) {
+				karasu[i].is_dead = true;
+			}
+		}
+	}
 }

@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Background.cpp" />
     <ClCompile Include="Karasu.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Game.cpp" />
