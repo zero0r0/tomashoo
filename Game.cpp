@@ -14,7 +14,7 @@ void DeleteGraphicAll();
 Player player;
 Shot shot[MAX_TOMATO];
 Item item[MAX_TOMATO];
-Enemy karasu[MAX_KARASU];
+Enemy enemy[MAX_ENEMY];
 Background background[STAGE_NUM];
 
 int mode;
@@ -30,11 +30,11 @@ int speed_needle_graphic;
 
 /*----------FPS関連-----------------*/
 
-static int mStartTime;      //測定開始時刻
-static int mCount;          //カウンタ
-static float mFps;          //fps
-static const int N = 60;	//平均を取るサンプル数
-static const int FPS = 60;	//設定したFPS
+int mStartTime;      //測定開始時刻
+int mCount;          //カウンタ
+float mFps;          //fps
+const int N = 60;	//平均を取るサンプル数
+const int FPS = 60;	//設定したFPS
 
 bool Update() {
 	if (mCount == 0) { //1フレーム目なら時刻を記憶
@@ -104,7 +104,6 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 	//メインループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0) {
 		Update();
-		Draw();
 		ClearDrawScreen();
 		KeyUpdate();
 		//--------------ゲームの処理をする-----------------
@@ -123,7 +122,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 		default:
 			break;
 		}
-
+		Draw();
 		ScreenFlip();
 		Wait();
 	}
@@ -134,8 +133,8 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 
 void LoadGraphicAll() {
 	LoadDivGraph("Data/pc01.png",2,2,1,48,48, player.graphic);
-	for (int i = 0; i < MAX_KARASU; i++) {
-		LoadDivGraph("Data/en01.png", 2, 2, 1, 48, 48, karasu[i].graphic);
+	for (int i = 0; i < MAX_ENEMY; i++) {
+		LoadDivGraph("Data/en01.png", 2, 2, 1, 48, 48, enemy[i].graphic);
 	}
 	player.life_graphic = LoadGraph("Data/life.bmp");
 	tomato_graphic = LoadGraph("Data/bl01.png");
@@ -152,9 +151,9 @@ void DeleteGraphicAll() {
 	DeleteGraph(tomato_graphic);
 	for(int i = 0; i < STAGE_NUM;i++)
 		DeleteGraph(background[i].graphic);
-	for (int i = 0; i < MAX_KARASU; i++) {
-		DeleteGraph(karasu[i].graphic[0]);
-		DeleteGraph(karasu[i].graphic[1]);
+	for (int i = 0; i < MAX_ENEMY; i++) {
+		DeleteGraph(enemy[i].graphic[0]);
+		DeleteGraph(enemy[i].graphic[1]);
 	}
 	DeleteGraph(speed_meter_graphic);
 	DeleteGraph(speed_needle_graphic);

@@ -2,7 +2,7 @@
 #include "data.h"
 #include "DxLib.h"
 
-
+double timer;
 
 //ƒƒCƒ“ƒQ[ƒ€n‚Ü‚é‚Æ‚«‚É‚·‚é‰Šú‰»
 void MainGameInit() {
@@ -10,6 +10,7 @@ void MainGameInit() {
 	EnemyInit();
 	ShotInit();
 	BackgroundInit();
+	timer = 0;
 }
 
 void MainGameUpdate() {
@@ -17,6 +18,7 @@ void MainGameUpdate() {
 	EnemyUpdate();
 	ShotUpdate();
 	BackgroundUpdate();
+	timer += 1.0 / mFps;
 }
 
 void MainGameDraw() {

@@ -1,7 +1,7 @@
 #pragma once
 
 #define MAX_TOMATO 255
-#define MAX_KARASU 1
+#define MAX_ENEMY 1
 #define STAGE_NUM 2
 
 /*オブジェクト系*/
@@ -29,6 +29,7 @@ typedef struct {
 	int start_x, start_y;		//スタートするポジション
 	int x, y;					
 	int x_size, y_size;
+	int speed;
 }Enemy;
 
 typedef struct {
@@ -77,7 +78,7 @@ void MainGameDraw();
 extern Player player;
 extern Shot shot[MAX_TOMATO];
 extern Item item[MAX_TOMATO];
-extern Enemy karasu[MAX_KARASU];
+extern Enemy enemy[MAX_ENEMY];
 extern Background background[STAGE_NUM];
 
 
@@ -101,3 +102,11 @@ extern int const TITLE;
 extern int const MAIN;
 extern int const GAMEOVER;
 extern int mode;
+
+/*----------FPS関連-----------------*/
+
+extern int mStartTime;      //測定開始時刻
+extern int mCount;          //カウンタ
+extern float mFps;          //fps
+extern const int N;	//平均を取るサンプル数
+extern const int FPS;	//設定したFPS

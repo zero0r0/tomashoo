@@ -157,7 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
-    <ClCompile Include="Karasu.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MainGame.cpp" />

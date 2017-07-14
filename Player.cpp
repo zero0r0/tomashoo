@@ -96,9 +96,9 @@ void PlayerCollision() {
 	if (player.safetime > 0)
 		player.safetime--;
 	else {
-		for (int i = 0; i < MAX_KARASU; i++) {
-			if (karasu[i].x <= player.x + player.x_size && karasu[i].x + karasu[i].x_size >= player.x) {
-				if (karasu[i].y <= player.y + player.y_size && karasu[i].y + karasu[i].y_size >= player.y) {
+		for (int i = 0; i < MAX_ENEMY; i++) {
+			if (enemy[i].x <= player.x + player.x_size && enemy[i].x + enemy[i].x_size >= player.x) {
+				if (enemy[i].y <= player.y + player.y_size && enemy[i].y + enemy[i].y_size >= player.y) {
 					player.life -= 1;
 					player.safetime = 60;
 					if (player.life == 0) {
