@@ -15,7 +15,7 @@ void PlayerInit() {
 	player.safetime = 10;
 	player.shot_trigger = 10;
 	player.tomato = 50;
-	player.speed = 5;
+	player.speed = 1;
 }
 
 //プレイヤー更新関数

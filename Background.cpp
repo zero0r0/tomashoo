@@ -18,7 +18,7 @@ void BackgroundInit() {
 void BackgroundUpdate() {
 	for (int i = 0; i < 2; i++) {
 		if (background[i].y >= 480) {
-			background[i].y = - 480 - 960;
+			background[i].y -= 480 + 960 - player.speed;
 			background[i].loopNum++;
 			if (background[i].loopNum >= CHANGE_BACKGROUND_BY_LOOP_NUM 
 				&& background[i].now_stage < MAX_STAGE ) {

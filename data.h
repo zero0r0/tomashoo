@@ -27,13 +27,13 @@ typedef struct {
 }Shot;
 
 typedef struct {
-	bool is_dead;
+	bool is_appeared;			//出現したかどうか
+	bool is_dead;				//しんだ、画面外か
 	//int graphic[2];
 	int state;					//どのアニメーション画像のステートか
 	int x, y;					
 	int x_size, y_size;
-	int speed;
-	double wait_time;			//出現時間
+	int wait_time;				//出現時間
 	int type;
 	int move_direction_x;
 	int move_direction_y;

@@ -2,7 +2,6 @@
 #include "data.h"
 #include "Key.h"
 
-int enemy_count = 0;
 double enemy_timer = 0;
 
 void EnemyLoad() {
@@ -11,8 +10,7 @@ void EnemyLoad() {
 	int e_type;
 	int s_x, s_y;
 	int d_x, d_y;
-	int speed;
-	double time;
+	int time;
 
 	auto e = fopen_s(&fp, fname, "r");
 	if (e != 0) {
@@ -21,21 +19,17 @@ void EnemyLoad() {
 	}
 
 	int i = 0;
-
+	int dust;
 	//àÍçsñ⁄ÇÕÇ¢ÇÁÇ»Ç¢
-	char buf[60];
-	if (fscanf_s(fp,"%s", buf) == EOF) {
-		return;
-	}
+	while ((dust = fgetc(fp)) != '\n');
 	
-	while (i < MAX_ENEMY && (fscanf_s(fp,"%d,%d,%d,%d,%d,%d,%lf",&e_type, &s_x,&s_y,&d_x,&d_y,&speed, &time)) != EOF)	{
+	while (i < MAX_ENEMY && (fscanf_s(fp,"%d,%d,%d,%d,%d,%d",&e_type, &s_x,&s_y,&d_x,&d_y, &time)) != EOF)	{
 		enemy[i].x = s_x;
 		enemy[i].y = s_y;
 		enemy[i].move_direction_x = d_x;
 		enemy[i].move_direction_y = d_y;
 		enemy[i].wait_time = time;
 		enemy[i].type = e_type;
-		enemy[i].speed = speed;
 		i++;
 	}
 
@@ -50,39 +44,40 @@ void EnemyInit() {
 		enemy[i].y = 0;
 		enemy[i].x_size = 48;
 		enemy[i].y_size = 48;
-		enemy[i].is_dead = true;
+		enemy[i].is_dead = false;
+		enemy[i].is_appeared = false;
 	}
-	enemy_count = 0;
 	enemy_timer = 0;
 	EnemyLoad();
 }
 
 void EnemyUpdate() {
 	enemy_timer += (double)player.speed * (1.0 / mFps);
+	SpawnEnemy();
 	for (int i = 0; i < MAX_ENEMY; i++) {
-		if (!enemy[i].is_dead) {
-			enemy[i].y += (player.speed + enemy[i].speed + enemy[i].move_direction_y);
-			enemy[i].x += (enemy[i].speed + enemy[i].move_direction_x);
+		if (!enemy[i].is_dead && enemy[i].is_appeared) {
+			enemy[i].y += (player.speed + enemy[i].move_direction_y);
+			enemy[i].x += enemy[i].move_direction_x;
 		}
-		if (enemy[i].y < 0)
+		if (enemy[i].y > 480)
 			enemy[i].is_dead = true;
 	}
-	SpawnEnemy();
 }
 
 void SpawnEnemy() {
-	if (enemy[enemy_count].wait_time >= enemy_timer && enemy_count < MAX_ENEMY) {
-		enemy[enemy_count].is_dead = false;
-		enemy_count++;
+	for (int i = 0; i < MAX_ENEMY; i++) {
+		if (enemy[i].wait_time <= enemy_timer) {
+			enemy[i].is_appeared = true;
+		}
 	}
 }
 
 void EnemyDraw() {
 	for (int i = 0; i < MAX_ENEMY; i++) {
-		if (!enemy[i].is_dead) {
+		if (!enemy[i].is_dead && enemy[i].is_appeared) {
 			DrawGraph(enemy[i].x, enemy[i].y, enemy_graphic[enemy[i].type][enemy[i].state], TRUE);
 		}
 	}
-	DrawFormatString(0, 480, GetColor(255, 255, 255), "%lf", enemy_timer);
+	DrawFormatString(0, 20, GetColor(255, 255, 255), "%lf", enemy_timer);
 }
 
