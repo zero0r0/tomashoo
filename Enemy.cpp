@@ -22,6 +22,12 @@ void EnemyLoad() {
 
 	int i = 0;
 
+	//ˆês–Ú‚Í‚¢‚ç‚È‚¢
+	char buf[60];
+	if (fscanf_s(fp,"%s", buf) == EOF) {
+		return;
+	}
+	
 	while (i < MAX_ENEMY && (fscanf_s(fp,"%d,%d,%d,%d,%d,%d,%lf",&e_type, &s_x,&s_y,&d_x,&d_y,&speed, &time)) != EOF)	{
 		enemy[i].x = s_x;
 		enemy[i].y = s_y;
@@ -52,19 +58,20 @@ void EnemyInit() {
 }
 
 void EnemyUpdate() {
-	enemy_timer += player.speed * (1 / mFps);
+	enemy_timer += (double)player.speed * (1.0 / mFps);
 	for (int i = 0; i < MAX_ENEMY; i++) {
 		if (!enemy[i].is_dead) {
 			enemy[i].y += (player.speed + enemy[i].speed + enemy[i].move_direction_y);
-			enemy[i].x += enemy[i].speed * enemy[i].move_direction_x;
+			enemy[i].x += (enemy[i].speed + enemy[i].move_direction_x);
 		}
+		if (enemy[i].y < 0)
+			enemy[i].is_dead = true;
 	}
 	SpawnEnemy();
-
 }
 
 void SpawnEnemy() {
-	if (enemy[enemy_count].wait_time >= timer && enemy_count < MAX_ENEMY) {
+	if (enemy[enemy_count].wait_time >= enemy_timer && enemy_count < MAX_ENEMY) {
 		enemy[enemy_count].is_dead = false;
 		enemy_count++;
 	}
@@ -73,15 +80,9 @@ void SpawnEnemy() {
 void EnemyDraw() {
 	for (int i = 0; i < MAX_ENEMY; i++) {
 		if (!enemy[i].is_dead) {
-			switch (enemy[i].type)
-			{
-			case 0:
-				DrawGraph(enemy[i].x, enemy[i].y, karasu_graphic[enemy[i].state], TRUE);
-				break;
-			default:
-				break;
-			}
+			DrawGraph(enemy[i].x, enemy[i].y, enemy_graphic[enemy[i].type][enemy[i].state], TRUE);
 		}
 	}
+	DrawFormatString(0, 480, GetColor(255, 255, 255), "%lf", enemy_timer);
 }
 

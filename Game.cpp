@@ -28,7 +28,7 @@ int tomato_graphic;
 int speed_meter_graphic;
 int speed_needle_graphic;
 int background_graphic[MAX_STAGE];
-int karasu_graphic[ENEMY_ANIMETION_NUM];
+int enemy_graphic[MAX_ENEMY_TYPE][ENEMY_ANIMETION_NUM];
 
 /*----------FPSŠÖ˜A-----------------*/
 
@@ -135,7 +135,12 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 
 void LoadGraphicAll() {
 	LoadDivGraph("Data/pc01.png",2,2,1,48,48, player.graphic);
-	LoadDivGraph("Data/en01.png", 2, 2, 1, 48, 48, karasu_graphic);
+	LoadDivGraph("Data/en01.png", 2, 2, 1, 48, 48, enemy_graphic[0]);
+	LoadDivGraph("Data/en02.png", 2, 2, 1, 48, 48, enemy_graphic[1]);
+	LoadDivGraph("Data/en03.png", 2, 2, 1, 48, 48, enemy_graphic[2]);
+	LoadDivGraph("Data/en04.png", 2, 2, 1, 48, 48, enemy_graphic[3]);
+//	LoadDivGraph("Data/en05.png", 2, 2, 1, 48, 48, enemy_graphic[4]);
+
 	player.life_graphic = LoadGraph("Data/life.bmp");
 	tomato_graphic = LoadGraph("Data/bl01.png");
 	background_graphic[0] = LoadGraph("Data/inaka.png");
@@ -151,8 +156,10 @@ void DeleteGraphicAll() {
 	DeleteGraph(tomato_graphic);
 	for(int i = 0; i < MAX_STAGE;i++)
 		DeleteGraph(background_graphic[i]);
-	for (int i = 0; i < ENEMY_ANIMETION_NUM; i++) {
-		DeleteGraph(karasu_graphic[i]);
+	for (int i = 0; i < MAX_ENEMY_TYPE; i++) {
+		for (int j = 0; j < ENEMY_ANIMETION_NUM; j++) {
+			DeleteGraph(enemy_graphic[i][j]);
+		}
 	}
 	DeleteGraph(speed_meter_graphic);
 	DeleteGraph(speed_needle_graphic);

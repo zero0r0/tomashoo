@@ -2,6 +2,7 @@
 
 #define MAX_TOMATO 255
 #define MAX_ENEMY 25
+#define MAX_ENEMY_TYPE 5
 #define MAX_STAGE 2
 #define CHANGE_BACKGROUND_BY_LOOP_NUM 5
 #define ENEMY_ANIMETION_NUM 2	//敵のアニメーションの画像数
@@ -96,8 +97,7 @@ extern int tomato_graphic;
 extern int speed_meter_graphic;
 extern int speed_needle_graphic;
 extern int background_graphic[MAX_STAGE];
-extern int karasu_graphic[ENEMY_ANIMETION_NUM];
-extern int inoshishi_graphic[ENEMY_ANIMETION_NUM];
+extern int enemy_graphic[MAX_ENEMY_TYPE][ENEMY_ANIMETION_NUM];
 
 
 
