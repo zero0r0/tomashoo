@@ -1,15 +1,17 @@
 #pragma once
 
 #define MAX_TOMATO 255
-#define MAX_ENEMY 1
-#define STAGE_NUM 2
+#define MAX_ENEMY 25
+#define MAX_STAGE 2
+#define CHANGE_BACKGROUND_BY_LOOP_NUM 5
+#define ENEMY_ANIMETION_NUM 2	//敵のアニメーションの画像数
 
 /*オブジェクト系*/
 typedef struct {
 	int graphic[2];			//プレイヤー画像
 	int x, y;				//xy座標
 	int x_size, y_size;		//x.y大きさ
-	int life;				//ライフ
+	int life;				//ライ
 	int life_graphic;		//ライフの画像
 	int safetime;			//無敵時間
 	int shot_trigger;		//ショットのインターバル
@@ -18,18 +20,22 @@ typedef struct {
 }Player;
 
 typedef struct {
-	int life;
+	int life;	
 	int x, y;				//xy座標
 	int x_size, y_size;		//x.y大きさ
 }Shot;
 
 typedef struct {
 	bool is_dead;
-	int graphic[2];
-	int start_x, start_y;		//スタートするポジション
+	//int graphic[2];
+	int state;					//どのアニメーション画像のステートか
 	int x, y;					
 	int x_size, y_size;
 	int speed;
+	double wait_time;			//出現時間
+	int type;
+	int move_direction_x;
+	int move_direction_y;
 }Enemy;
 
 typedef struct {
@@ -40,8 +46,8 @@ typedef struct {
 typedef struct {
 	int x, y;
 	int x_size, y_size;
-	int graphic;
-	int loopNum;	//ループ回数
+	int now_stage;
+	int loopNum;			//ループ回数
 }Background;
 
 
@@ -57,6 +63,8 @@ void PlayerSpeedDown();
 void EnemyInit();
 void EnemyUpdate();
 void EnemyDraw();
+void EnemyLoad();
+void SpawnEnemy();
 
 void ShotInit();
 void ShotUpdate();
@@ -79,7 +87,7 @@ extern Player player;
 extern Shot shot[MAX_TOMATO];
 extern Item item[MAX_TOMATO];
 extern Enemy enemy[MAX_ENEMY];
-extern Background background[STAGE_NUM];
+extern Background background[2];
 
 
 /*グラフィック系*/
@@ -87,9 +95,9 @@ extern int shot_graphic;
 extern int tomato_graphic;
 extern int speed_meter_graphic;
 extern int speed_needle_graphic;
-
-//extern int backbround_graphic[STAGE_NUM];
-//extern int karasu_graphic;
+extern int background_graphic[MAX_STAGE];
+extern int karasu_graphic[ENEMY_ANIMETION_NUM];
+extern int inoshishi_graphic[ENEMY_ANIMETION_NUM];
 
 
 
@@ -102,6 +110,8 @@ extern int const TITLE;
 extern int const MAIN;
 extern int const GAMEOVER;
 extern int mode;
+
+extern double timer;
 
 /*----------FPS関連-----------------*/
 

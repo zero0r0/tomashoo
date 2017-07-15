@@ -15,7 +15,7 @@ Player player;
 Shot shot[MAX_TOMATO];
 Item item[MAX_TOMATO];
 Enemy enemy[MAX_ENEMY];
-Background background[STAGE_NUM];
+Background background[MAX_STAGE];
 
 int mode;
 int const TITLE = 0;
@@ -27,6 +27,8 @@ int shot_graphic;
 int tomato_graphic;
 int speed_meter_graphic;
 int speed_needle_graphic;
+int background_graphic[MAX_STAGE];
+int karasu_graphic[ENEMY_ANIMETION_NUM];
 
 /*----------FPSŠÖ˜A-----------------*/
 
@@ -133,13 +135,11 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 
 void LoadGraphicAll() {
 	LoadDivGraph("Data/pc01.png",2,2,1,48,48, player.graphic);
-	for (int i = 0; i < MAX_ENEMY; i++) {
-		LoadDivGraph("Data/en01.png", 2, 2, 1, 48, 48, enemy[i].graphic);
-	}
+	LoadDivGraph("Data/en01.png", 2, 2, 1, 48, 48, karasu_graphic);
 	player.life_graphic = LoadGraph("Data/life.bmp");
 	tomato_graphic = LoadGraph("Data/bl01.png");
-	background[0].graphic = LoadGraph("Data/inaka.png");
-	background[1].graphic = LoadGraph("Data/hatake.png");
+	background_graphic[0] = LoadGraph("Data/inaka.png");
+	background_graphic[1] = LoadGraph("Data/hatake.png");
 	speed_meter_graphic = LoadGraph("Data/speed_meter.png");
 	speed_needle_graphic = LoadGraph("Data/speed_needle.png");
 }
@@ -149,11 +149,10 @@ void DeleteGraphicAll() {
 	DeleteGraph(player.graphic[1]);
 	DeleteGraph(player.life_graphic);
 	DeleteGraph(tomato_graphic);
-	for(int i = 0; i < STAGE_NUM;i++)
-		DeleteGraph(background[i].graphic);
-	for (int i = 0; i < MAX_ENEMY; i++) {
-		DeleteGraph(enemy[i].graphic[0]);
-		DeleteGraph(enemy[i].graphic[1]);
+	for(int i = 0; i < MAX_STAGE;i++)
+		DeleteGraph(background_graphic[i]);
+	for (int i = 0; i < ENEMY_ANIMETION_NUM; i++) {
+		DeleteGraph(karasu_graphic[i]);
 	}
 	DeleteGraph(speed_meter_graphic);
 	DeleteGraph(speed_needle_graphic);
