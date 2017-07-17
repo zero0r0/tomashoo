@@ -29,6 +29,11 @@ int speed_meter_graphic;
 int speed_needle_graphic;
 int background_graphic[MAX_STAGE];
 int enemy_graphic[MAX_ENEMY_TYPE][ENEMY_ANIMETION_NUM];
+int weather_graphic[3];
+int font_num_graphic[10];
+int font_tomato_graphic;
+int shasen_graphic;
+
 
 /*----------FPSŠÖ˜A-----------------*/
 
@@ -142,18 +147,34 @@ void LoadGraphicAll() {
 //	LoadDivGraph("Data/en05.png", 2, 2, 1, 48, 48, enemy_graphic[4]);
 
 	player.life_graphic = LoadGraph("Data/life.bmp");
-	tomato_graphic = LoadGraph("Data/bl01.png");
+	shot_graphic = LoadGraph("Data/bl01.png");
 	background_graphic[0] = LoadGraph("Data/inaka.png");
 	background_graphic[1] = LoadGraph("Data/hatake.png");
 	speed_meter_graphic = LoadGraph("Data/speed_meter.png");
 	speed_needle_graphic = LoadGraph("Data/speed_needle.png");
+	weather_graphic[0] = LoadGraph("Data/weather_cloudy.png");
+	weather_graphic[1] = LoadGraph("Data/weather_rainy.png");
+	weather_graphic[2] = LoadGraph("Data/weather_sunny.png");
+	tomato_graphic = LoadGraph("Data/tomato.png");
+	font_num_graphic[0] = LoadGraph("Data/font0.png");
+	font_num_graphic[1] = LoadGraph("Data/font1.png");
+	font_num_graphic[2] = LoadGraph("Data/font2.png");
+	font_num_graphic[3] = LoadGraph("Data/font3.png");
+	font_num_graphic[4] = LoadGraph("Data/font4.png");
+	font_num_graphic[5] = LoadGraph("Data/font5.png");
+	font_num_graphic[6] = LoadGraph("Data/font6.png");
+	font_num_graphic[7] = LoadGraph("Data/font7.png");
+	font_num_graphic[8] = LoadGraph("Data/font8.png");
+	font_num_graphic[9] = LoadGraph("Data/font9.png");
+	font_tomato_graphic = LoadGraph("Data/font.tomato.png");
+	shasen_graphic = LoadGraph("Data/shasen.png");
 }
 
 void DeleteGraphicAll() {
 	DeleteGraph(player.graphic[0]);
 	DeleteGraph(player.graphic[1]);
 	DeleteGraph(player.life_graphic);
-	DeleteGraph(tomato_graphic);
+	DeleteGraph(shot_graphic);
 	for(int i = 0; i < MAX_STAGE;i++)
 		DeleteGraph(background_graphic[i]);
 	for (int i = 0; i < MAX_ENEMY_TYPE; i++) {
@@ -161,8 +182,17 @@ void DeleteGraphicAll() {
 			DeleteGraph(enemy_graphic[i][j]);
 		}
 	}
+	for (int i = 0; i < 3; i++) {
+		DeleteGraph(weather_graphic[i]);
+	}
+
+	for (int i = 0; i < 10; i++) {
+		DeleteGraph(font_num_graphic[i]);
+	}
+
 	DeleteGraph(speed_meter_graphic);
 	DeleteGraph(speed_needle_graphic);
+	DeleteGraph(tomato_graphic);
 }
 
 void TestMessage() {
