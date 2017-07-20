@@ -7,15 +7,11 @@
 void ItemInit() {
 
 	for (int i = 0; i < 5; i++) {
-
 		item[i].x = -10;
-
 		item[i].y = -10;
-
 		item[i].x_size = 48;
-
 		item[i].y_size = 48;
-
+		item[i].r = 17;
 	}
 
 }
@@ -45,5 +41,6 @@ void ItemUpdate() {
 void ItemDraw() {
 	for (int i = 0; i<5; i++) {
 		DrawGraph(item[i].x, item[i].y, shot_graphic, true);
+		//DrawCircle(item[i].x + 24, item[i].y + 24, item[i].r, GetColor(255, 255, 255), true);
 	}
 }

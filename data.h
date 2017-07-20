@@ -41,8 +41,8 @@ typedef struct {
 	int x_size, y_size;
 	int wait_time;			//出現時間
 	int type;				//1:カラス、2:はくび、3:イノシシ 4.歩行,5,不良
-	int move_x;
-	int move_y;
+	int move_x;				
+	int move_y;				
 	int r;
 }Enemy;
 
@@ -116,7 +116,6 @@ extern int background_graphic[MAX_STAGE];
 extern int enemy_graphic[MAX_ENEMY_TYPE][ENEMY_ANIMETION_NUM];
 extern int weather_graphic[3];
 
-
 /*「mode」
 ゲームには、タイトル画面、メイン画面（ゲーム画面）、ゲームオーバー画面など、さまざまな画面がある。
 変数「mode」に現在の状態を入れておくことで、画面の切り替えができる。
@@ -137,3 +136,5 @@ extern int mCount;          //カウンタ
 extern float mFps;          //fps
 extern const int N;	//平均を取るサンプル数
 extern const int FPS;	//設定したFPS
+
+extern int enemy_count;

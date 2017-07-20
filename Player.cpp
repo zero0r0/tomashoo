@@ -64,7 +64,7 @@ void PlayerDraw() {
 	DrawGraph(30, 400, font_num_graphic[(player.tomato /100 ) %10], true);
 	DrawGraph(140, 400, shasen_graphic, true);
 	DrawGraph(30, 365, font_tomato_graphic, true);
-	DrawCircle(player.x + 24, player.y + 24, player.r, GetColor(255, 255, 255), true);
+	//DrawCircle(player.x + 24, player.y + 24, player.r, GetColor(255, 255, 255), true);
 }
 
 ///

@@ -8,6 +8,7 @@ void ShotInit() {
 		shot[i].y = -100;
 		shot[i].x_size = 48;
 		shot[i].y_size = 48;
+		shot[i].r = 12;
 	}
 }
 

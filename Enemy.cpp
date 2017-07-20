@@ -4,6 +4,8 @@
 #include <math.h>
 
 double total_distance = 0;
+double enemy_timer = 0;
+int enemy_count = 0;
 
 void EnemyLoad() {
 	FILE *fp;
@@ -33,6 +35,7 @@ void EnemyLoad() {
 		enemy[i].type = e_type;
 		enemy[i].x_size = 48;
 		enemy[i].y_size = 48;
+		enemy[i].r = 4;
 		i++;
 	}
 
@@ -49,13 +52,22 @@ void EnemyInit() {
 		enemy[i].y_size = 0;
 		enemy[i].is_dead = false;
 		enemy[i].is_appeared = false;
+		enemy[i].r = 6;
 	}
-	EnemyLoad();
+	enemy_count = 0;
+	enemy_timer = 0;
+	//EnemyLoad();
 }
 
 void EnemyUpdate() {
 	total_distance += (double)player.speed * (1.0 / mFps);
-	SpawnEnemy();
+	enemy_timer += (double)player.speed * (1.0 / mFps);
+	
+	if (enemy_timer >= 1.5) {
+		SpawnEnemy();
+		enemy_timer = 0;
+	}
+
 	for (int i = 0; i < MAX_ENEMY; i++) {
 		if (!enemy[i].is_dead && enemy[i].is_appeared) {
 			if (enemy[i].type == 5) {
@@ -72,24 +84,53 @@ void EnemyUpdate() {
 					enemy[i].is_dead = true;
 			}
 		}
-		
 	}
 }
 
+//“GoŒ»Žž‚ÌŠÖ”
 void SpawnEnemy() {
-	for (int i = 0; i < MAX_ENEMY; i++) {
-		if (enemy[i].wait_time <= total_distance) {
-			enemy[i].is_appeared = true;
+	int spawn_pattern = GetRand(2);
+	int type = GetRand(2);
+	int x, y;
+	int m_x, m_y;
+	
+	if (type < 3) {
+		switch (spawn_pattern)
+		{
+			case 0:
+				x = GetRand(640);
+				y = GetRand(10) - 20;
+				break;
+			case 1:
+				x = GetRand(10) - 20;
+				y = GetRand(240);
+				break;
+			case 2:
+				x = 640 + GetRand(20);
+				y = GetRand(240);
+			default:
+				break;
 		}
+		if (x < 360)
+			m_x = GetRand(10);
+		else
+			m_x = (-1) * GetRand(10);
+		m_y = GetRand(5);
 	}
+	enemy[enemy_count].x = x;
+	enemy[enemy_count].y = y;
+	enemy[enemy_count].move_x = m_x;
+	enemy[enemy_count].move_y = m_y;
+	enemy[enemy_count].is_appeared = true;
+	enemy_count++;
 }
 
 void EnemyDraw() {
 	for (int i = 0; i < MAX_ENEMY; i++) {
 		if (!enemy[i].is_dead && enemy[i].is_appeared) {
 			DrawGraph(enemy[i].x, enemy[i].y, enemy_graphic[enemy[i].type][enemy[i].state], TRUE);
+			DrawCircle(enemy[i].x + 24, enemy[i].y + 24, enemy[i].r, GetColor(255, 255, 255), true);
 		}
 	}
 	//DrawFormatString(0, 20, GetColor(255, 255, 255), "%lf", enemy_timer);
 }
-

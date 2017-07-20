@@ -32,6 +32,7 @@ void MainGameDraw() {
 	for (int i = 0; i < MAX_TOMATO; i++) {
 		if (shot[i].life > 0) {
 			DrawGraph(shot[i].x, shot[i].y, shot_graphic, true);
+			//DrawCircle(shot[i].x + 24, shot[i].y + 24, shot[i].r, GetColor(255, 255, 255), true);
 		}
 	}
 	DrawGraph(440,-5,weather_graphic[0],true);
