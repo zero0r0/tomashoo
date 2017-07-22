@@ -11,7 +11,7 @@ void TitleInit() {
 //タイトル時に更新する処理を書く
 void TitleUpdata() {
 	if (key_z > 0) {
-		mode = MAIN;
+		scene = MAIN;
 		MainGameInit();
 	}
 

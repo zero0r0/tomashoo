@@ -2,7 +2,7 @@
 
 #define MAX_TOMATO 255
 #define MAX_ITEM 5
-#define MAX_ENEMY 25
+#define MAX_ENEMY 50
 #define MAX_ENEMY_TYPE 5
 #define MAX_STAGE 2
 #define CHANGE_BACKGROUND_BY_LOOP_NUM 5
@@ -39,7 +39,7 @@ typedef struct {
 	int state;				//どのアニメーション画像のステートか
 	int x, y;					
 	int x_size, y_size;
-	int wait_time;			//出現時間
+//	int wait_time;			//出現時間
 	int type;				//1:カラス、2:はくび、3:イノシシ 4.歩行,5,不良
 	int move_x;				
 	int move_y;				
@@ -72,8 +72,8 @@ void PlayerSpeedDown();
 void EnemyInit();
 void EnemyUpdate();
 void EnemyDraw();
-void EnemyLoad();
-void SpawnEnemy();
+//void EnemyLoad();
+void SpawnEnemy(int);
 
 void ShotInit();
 void ShotUpdate();
@@ -116,15 +116,15 @@ extern int background_graphic[MAX_STAGE];
 extern int enemy_graphic[MAX_ENEMY_TYPE][ENEMY_ANIMETION_NUM];
 extern int weather_graphic[3];
 
-/*「mode」
+/*「scene」
 ゲームには、タイトル画面、メイン画面（ゲーム画面）、ゲームオーバー画面など、さまざまな画面がある。
-変数「mode」に現在の状態を入れておくことで、画面の切り替えができる。
-例えば、「mode」が0ならタイトル画面を描画、1ならメイン画面の描画、2ならゲームオーバ―画面の描画をする。
+変数「scene」に現在の状態を入れておくことで、画面の切り替えができる。
+例えば、「scene」が0ならタイトル画面を描画、1ならメイン画面の描画、2ならゲームオーバ―画面の描画をする。
 最初はタイトル画面なので、初期値として0を入れておく。*/
 extern int const TITLE;
 extern int const MAIN;
 extern int const GAMEOVER;
-extern int mode;
+extern int scene;
 
 extern double total_distance;
 extern double timer;
@@ -137,4 +137,3 @@ extern float mFps;          //fps
 extern const int N;	//平均を取るサンプル数
 extern const int FPS;	//設定したFPS
 
-extern int enemy_count;

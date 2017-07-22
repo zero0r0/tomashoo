@@ -118,7 +118,7 @@ void PlayerCollision() {
 					player.life -= 1;
 					player.safetime = 60;
 					if (enemy[i].type == 2 || enemy[i].type == 3 || enemy[i].type == 5) {
-						mode = GAMEOVER;
+						scene = GAMEOVER;
 					}
 				}
 			}

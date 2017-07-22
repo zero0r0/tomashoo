@@ -5,8 +5,8 @@
 
 double total_distance = 0;
 double enemy_timer = 0;
-int enemy_count = 0;
 
+/*
 void EnemyLoad() {
 	FILE *fp;
 	char *fname = "Data/enemy.csv";
@@ -41,96 +41,133 @@ void EnemyLoad() {
 
 	fclose(fp);
 }
+*/
 
 //敵の初期化の関数
 void EnemyInit() {
 	for (int i = 0; i < MAX_ENEMY; i++) {
 		enemy[i].state = 0;
-		enemy[i].x = -10;
-		enemy[i].y = -10;
-		enemy[i].x_size = 0;
-		enemy[i].y_size = 0;
-		enemy[i].is_dead = false;
-		enemy[i].is_appeared = false;
+		enemy[i].x = -100;
+		enemy[i].y = -100;
+		enemy[i].move_x = 0;
+		enemy[i].move_y = 0;
+		enemy[i].x_size = 48;
+		enemy[i].y_size = 48;
+		enemy[i].type = 0;
+		enemy[i].is_dead = true;
+		//enemy[i].is_appeared = false;
 		enemy[i].r = 6;
 	}
-	enemy_count = 0;
 	enemy_timer = 0;
 	//EnemyLoad();
 }
 
 void EnemyUpdate() {
+	bool is_spawn = false;
+
 	total_distance += (double)player.speed * (1.0 / mFps);
 	enemy_timer += (double)player.speed * (1.0 / mFps);
 	
-	if (enemy_timer >= 1.5) {
-		SpawnEnemy();
-		enemy_timer = 0;
-	}
+	//一定時間で敵を出現させる
+	if (enemy_timer > 1.6)
+		is_spawn = true;
+	else
+		is_spawn = false;
+	
 
 	for (int i = 0; i < MAX_ENEMY; i++) {
-		if (!enemy[i].is_dead && enemy[i].is_appeared) {
-			if (enemy[i].type == 5) {
-				int x = (int)(sin(2 * PI / 60 * timer) * enemy[i].move_x);
-				enemy[i].x += x;
-				enemy[i].y += (player.speed + enemy[i].move_y);
-				if(enemy[i].y <= 0)
-					enemy[i].is_dead = true;
+		if (enemy[i].is_dead) {
+			if (is_spawn) {
+				SpawnEnemy(i);
+				is_spawn = false;
+				enemy_timer = 0;
 			}
-			else {
-				enemy[i].y += (player.speed + enemy[i].move_y);
-				enemy[i].x += enemy[i].move_x;
-				if (enemy[i].y > 480)
-					enemy[i].is_dead = true;
+		}
+		else{
+			enemy[i].y += (player.speed + enemy[i].move_y);
+			enemy[i].x += enemy[i].move_x;
+			if (enemy[i].y > 480) {
+				enemy[i].is_dead = true;
 			}
 		}
 	}
 }
 
-//敵出現時の関数
-void SpawnEnemy() {
-	int spawn_pattern = GetRand(2);
-	int type = GetRand(2);
-	int x, y;
-	int m_x, m_y;
+//動物の敵出現時の関数
+void SpawnEnemy(int n) {
+	int type;
+	int x = 0, y = 0;
+	int m_x=0, m_y=0;
+	int rand_spawn = GetRand(2);
 	
-	if (type < 3) {
-		switch (spawn_pattern)
-		{
-			case 0:
+	//ステージで出てくる敵の種類を決める
+	switch (background[1].now_stage)
+	{
+		case 0:
+			type = 0;
+			break;
+		case 1:
+			type = GetRand(2);
+			break;
+		default:
+			//return;
+			break;
+	}
+
+	//敵によって出現方法や移動量を変える
+	switch (type)
+	{
+		//カラス
+		case 0:
+			if (rand_spawn == 0) {
 				x = GetRand(640);
-				y = GetRand(10) - 20;
-				break;
-			case 1:
-				x = GetRand(10) - 20;
+				y = -GetRand(20);
+			}
+			else if (rand_spawn == 1) {
+				x = -GetRand(20);
 				y = GetRand(240);
-				break;
-			case 2:
+			}
+			else {
 				x = 640 + GetRand(20);
 				y = GetRand(240);
-			default:
-				break;
-		}
-		if (x < 360)
-			m_x = GetRand(10);
-		else
-			m_x = (-1) * GetRand(10);
-		m_y = GetRand(5);
+			}
+
+			if (x < 360)
+				m_x = 2 + GetRand(4);
+			else
+				m_x = (-2) * (1 + GetRand(4));
+			m_y = GetRand(4);
+
+			break;
+		//ハクビシン
+		case 1:
+			x = GetRand(640);
+			y = -GetRand(10);
+			break;
+		//イノシシ
+		case 2:
+			x = GetRand(640);
+			y = -GetRand(10);
+			m_y = GetRand(10);
+			break;
+		default:
+			break;
 	}
-	enemy[enemy_count].x = x;
-	enemy[enemy_count].y = y;
-	enemy[enemy_count].move_x = m_x;
-	enemy[enemy_count].move_y = m_y;
-	enemy[enemy_count].is_appeared = true;
-	enemy_count++;
+
+	enemy[n].x = x;
+	enemy[n].y = y;
+	enemy[n].move_x = m_x;
+	enemy[n].move_y = m_y;
+	enemy[n].type = type;
+	enemy[n].is_dead = false;
 }
 
 void EnemyDraw() {
 	for (int i = 0; i < MAX_ENEMY; i++) {
-		if (!enemy[i].is_dead && enemy[i].is_appeared) {
+		if (!enemy[i].is_dead) {
 			DrawGraph(enemy[i].x, enemy[i].y, enemy_graphic[enemy[i].type][enemy[i].state], TRUE);
 			DrawCircle(enemy[i].x + 24, enemy[i].y + 24, enemy[i].r, GetColor(255, 255, 255), true);
 		}
 	}
-	//DrawFormatString(0, 20, GetColor(255, 255, 255), "%lf", enemy_timer);
+	DrawFormatString(400, 440, GetColor(255, 255, 255), "%lf", enemy_timer);
 }

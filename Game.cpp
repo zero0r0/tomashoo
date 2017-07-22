@@ -17,7 +17,7 @@ Item item[MAX_TOMATO];
 Enemy enemy[MAX_ENEMY];
 Background background[MAX_STAGE];
 
-int mode;
+int scene;
 int const TITLE = 0;
 int const MAIN = 1;
 int const GAMEOVER = 2;
@@ -105,7 +105,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 	
 	LoadGraphicAll();
 
-	mode = TITLE;
+	scene = TITLE;
 	TitleInit();
 
 	//メインループ
@@ -114,22 +114,23 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 		ClearDrawScreen();
 		KeyUpdate();
 		//--------------ゲームの処理をする-----------------
-		//変数「mode」が0ならば、タイトル画面の処理をする
-		switch (mode) {
-		case TITLE:
-			TitleUpdata();
-			TitleDraw();
-			break;
-		case MAIN:
-			MainGameUpdate();
-			MainGameDraw();
-			break;
-		case GAMEOVER:
-			break;
-		default:
-			break;
+		//変数「scene」が0ならば、タイトル画面の処理をする
+		switch (scene) {
+			case TITLE:
+				TitleUpdata();
+				TitleDraw();
+				break;
+			case MAIN:
+				MainGameUpdate();
+				MainGameDraw();
+				break;
+			case GAMEOVER:
+				break;
+			default:
+				break;
 		}
 		Draw();
+		TestMessage();
 		ScreenFlip();
 		Wait();
 	}
@@ -196,5 +197,5 @@ void DeleteGraphicAll() {
 }
 
 void TestMessage() {
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "変数 mode の値は %d です", mode);
+	DrawFormatString(100, 100, GetColor(255, 255, 255), "変数 scene の値は %d です", scene);
 }

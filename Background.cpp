@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include <math.h>
 
+int now_stage = 0;
 
 void BackgroundInit() {
 	background[0].x = 0;
@@ -13,14 +14,24 @@ void BackgroundInit() {
 	background[1].y = background[0].y - 960;
 	background[1].now_stage = 0;
 	background[1].loopNum = 0;
+
+	now_stage = 0;
 }
 
 void BackgroundUpdate() {
 	for (int i = 0; i < 2; i++) {
+
+		//”wŒi‚ª‰º‚Ü‚ÅƒXƒNƒ[ƒ‹‚µ‚½‚ç
 		if (background[i].y >= 480) {
 			background[i].y -= 480 + 960 - player.speed;
-			if(background[i].now_stage==1) SpawnItem(i);
+			
+			//”wŒi‚ª”¨‚Ìê‡‚ÍƒAƒCƒeƒ€‚ðo‚·B
+			if(background[i].now_stage==1) 
+				SpawnItem(i);
+
 			background[i].loopNum++;
+
+			//”wŒi‚ð•Ï‚¦‚é‚Æ‚«‚Ìˆ—
 			if (background[i].loopNum >= CHANGE_BACKGROUND_BY_LOOP_NUM 
 				&& background[i].now_stage < MAX_STAGE-1 ) {
 				background[i].loopNum = 0;

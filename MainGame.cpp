@@ -36,4 +36,6 @@ void MainGameDraw() {
 		}
 	}
 	DrawGraph(440,-5,weather_graphic[0],true);
+	DrawFormatString(400,400, GetColor(255, 255, 255),"enemy : %d %d", enemy[1].x, enemy[1].y);
+	//DrawFormatString(400, 420, GetColor(255, 255, 255), "stage : %lf", now_stage);
 }
