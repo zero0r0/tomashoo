@@ -17,7 +17,7 @@ void PlayerInit() {
 	player.speed = 1;
 	player.count = 0;
 	player.anim_count = 0;
-	player.r = 7;
+	player.r = 10;
 }
 
 //プレイヤー更新関数
@@ -101,25 +101,22 @@ void PlayerShot() {
 
 void PlayerCollision() {
 	for (int i = 0; i < MAX_TOMATO; i++) {
-	if (item[i].x <= player.x + player.x_size / 2  && item[i].x + item[i].x_size >= player.x + player.x_size / 2) {
-		if (item[i].y <= player.y + player.y_size / 2 && item[i].y + item[i].y_size >= player.y + player.y_size / 2) {
-				player.tomato += 5;
-				item[i].y = -100;
-				item[i].x = -100;
-			}
-		}	
+		if ((player.x + player.x_size / 2 - (item[i].x + item[i].x_size / 2))* (player.x + player.x_size / 2 - (item[i].x + item[i].x_size / 2)) + (player.y + player.y_size / 2 - (item[i].y + item[i].y_size / 2))* (player.y + player.y_size / 2 - (item[i].y + item[i].y_size / 2)) <= (player.r + item[i].r)*(player.r + item[i].r)) {
+			player.tomato += 5;
+			item[i].y = -100;
+			item[i].x = -100;
+		}
 	}
+	
 	if (player.safetime > 0)
 		player.safetime--;
 	else {
 		for (int i = 0; i < MAX_ENEMY; i++) {
-			if (enemy[i].x <= player.x + player.x_size / 2 && enemy[i].x + enemy[i].x_size >= player.x + player.x_size / 2) {
-				if (enemy[i].y <= player.y + player.y_size / 2 && enemy[i].y + enemy[i].y_size >= player.y + player.y_size / 2) {
-					player.life -= 1;
-					player.safetime = 60;
-					if (enemy[i].type == 2 || enemy[i].type == 3 || enemy[i].type == 5) {
-						scene = GAMEOVER;
-					}
+			if ((player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2))*(player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2)) + (player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2))*(player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2)) <= (player.r + enemy[i].r)*(player.r + enemy[i].r)) { //22日エッグ変更
+				player.life -= 1;
+				player.safetime = 60;
+				if (enemy[i].type == 2 || enemy[i].type == 3 || enemy[i].type == 5) {
+					scene = GAMEOVER;
 				}
 			}
 		}

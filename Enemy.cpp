@@ -3,8 +3,11 @@
 #include "Key.h"
 #include <math.h>
 
+#define EFFECT_NUM 10
+
 double total_distance = 0;
 double enemy_timer = 0;
+Effect sand_effect[EFFECT_NUM];
 
 /*
 void EnemyLoad() {
@@ -56,12 +59,24 @@ void EnemyInit() {
 		enemy[i].type = 0;
 		enemy[i].is_dead = true;
 		//enemy[i].is_appeared = false;
-		enemy[i].r = 6;
+		enemy[i].r = 15;
 	}
+
+	//イノシシ用のエフェクト初期化
+	for (int i = 0; i < EFFECT_NUM; i++) {
+		sand_effect[i].x = -10;
+		sand_effect[i].y = -10;
+		sand_effect[i].count = 0;
+		sand_effect[i].is_used = false;
+		sand_effect[i].state = 0;
+	}
+
 	enemy_timer = 0;
 	//EnemyLoad();
 }
 
+//敵の更新関数
+//出現時のエフェクト処理も含む
 void EnemyUpdate() {
 	bool is_spawn = false;
 
@@ -88,6 +103,34 @@ void EnemyUpdate() {
 			enemy[i].x += enemy[i].move_x;
 			if (enemy[i].y > 480) {
 				enemy[i].is_dead = true;
+			}
+		}
+
+		if (enemy[i].count > 10) {
+			enemy[i].state++;
+			enemy[i].count = 0;
+		}
+		else {
+			enemy[i].count++;
+		}
+	}
+
+	//エフェクトの処理
+	for (int i = 0; i < EFFECT_NUM; i++) {
+		if (sand_effect[i].is_used) {
+			if (sand_effect[i].count > 10) {
+				sand_effect[i].state++;
+				sand_effect[i].count = 0;
+			}
+			else
+				sand_effect[i].count++;
+
+			if (sand_effect[i].state > 4) {
+				sand_effect[i].count = 0;
+				sand_effect[i].is_used = false;
+				sand_effect[i].x = -10;
+				sand_effect[i].y = -10;
+				sand_effect[i].state = 0;
 			}
 		}
 	}
@@ -149,6 +192,7 @@ void SpawnEnemy(int n) {
 			x = GetRand(640);
 			y = -GetRand(10);
 			m_y = GetRand(10);
+			SpawnEffect(x,5);
 			break;
 		default:
 			break;
@@ -162,12 +206,32 @@ void SpawnEnemy(int n) {
 	enemy[n].is_dead = false;
 }
 
+void SpawnEffect(int x, int y) {
+	for (int i = 0; i < EFFECT_NUM; i++) {
+		if (!sand_effect[i].is_used) {
+			sand_effect[i].x = x;
+			sand_effect[i].y = y;
+			sand_effect[i].count = 0;
+			sand_effect[i].state = 0;
+			sand_effect[i].is_used = true;
+		}
+	}
+}
+
 void EnemyDraw() {
 	for (int i = 0; i < MAX_ENEMY; i++) {
 		if (!enemy[i].is_dead) {
-			DrawGraph(enemy[i].x, enemy[i].y, enemy_graphic[enemy[i].type][enemy[i].state], TRUE);
-			DrawCircle(enemy[i].x + 24, enemy[i].y + 24, enemy[i].r, GetColor(255, 255, 255), true);
+			DrawGraph(enemy[i].x, enemy[i].y, enemy_graphic[enemy[i].type][enemy[i].state % 2], TRUE); //22日エッグ変更
+			//DrawCircle(enemy[i].x + 24, enemy[i].y + 24, enemy[i].r, GetColor(255, 255, 255), true);
 		}
 	}
+
+	//エフェクト描画
+	for (int i = 0; i < EFFECT_NUM; i++) {
+		if (sand_effect[i].is_used) {
+			DrawGraph(sand_effect[i].x, sand_effect[i].y, sand_effect_graphic[sand_effect[i].state%2],true);
+		}
+	}
+
 	DrawFormatString(400, 440, GetColor(255, 255, 255), "%lf", enemy_timer);
 }

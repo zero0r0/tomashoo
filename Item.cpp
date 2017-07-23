@@ -3,7 +3,6 @@
 #include "data.h"
 
 
-
 void ItemInit() {
 
 	for (int i = 0; i < 5; i++) {

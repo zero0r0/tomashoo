@@ -33,6 +33,8 @@ int weather_graphic[3];
 int font_num_graphic[10];
 int font_tomato_graphic;
 int shasen_graphic;
+int tomato_effect_graphic;
+int sand_effect_graphic[2];
 
 
 /*----------FPSŠÖ˜A-----------------*/
@@ -151,6 +153,7 @@ void LoadGraphicAll() {
 	shot_graphic = LoadGraph("Data/bl01.png");
 	background_graphic[0] = LoadGraph("Data/inaka.png");
 	background_graphic[1] = LoadGraph("Data/hatake.png");
+	background_graphic[2] = LoadGraph("Data/road.png");
 	speed_meter_graphic = LoadGraph("Data/speed_meter.png");
 	speed_needle_graphic = LoadGraph("Data/speed_needle.png");
 	weather_graphic[0] = LoadGraph("Data/weather_cloudy.png");
@@ -169,6 +172,8 @@ void LoadGraphicAll() {
 	font_num_graphic[9] = LoadGraph("Data/font9.png");
 	font_tomato_graphic = LoadGraph("Data/font.tomato.png");
 	shasen_graphic = LoadGraph("Data/shasen.png");
+	LoadDivGraph("Data/ef02.png", 2, 2, 1, 48, 48, sand_effect_graphic);
+	tomato_effect_graphic = LoadGraph("Data/tubureta_tomato.png");
 }
 
 void DeleteGraphicAll() {
@@ -190,10 +195,17 @@ void DeleteGraphicAll() {
 	for (int i = 0; i < 10; i++) {
 		DeleteGraph(font_num_graphic[i]);
 	}
+	
+	for (int i = 0; i < 2; i++) {
+		DeleteGraph(sand_effect_graphic[i]);
+	}
+	DeleteGraph(tomato_effect_graphic);
 
 	DeleteGraph(speed_meter_graphic);
 	DeleteGraph(speed_needle_graphic);
 	DeleteGraph(tomato_graphic);
+	DeleteGraph(font_tomato_graphic);
+	DeleteGraph(shasen_graphic);
 }
 
 void TestMessage() {

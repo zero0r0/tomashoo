@@ -4,7 +4,7 @@
 #define MAX_ITEM 5
 #define MAX_ENEMY 50
 #define MAX_ENEMY_TYPE 5
-#define MAX_STAGE 2
+#define MAX_STAGE 3
 #define CHANGE_BACKGROUND_BY_LOOP_NUM 5
 #define ENEMY_ANIMETION_NUM 2	//敵のアニメーションの画像数
 #define PI    3.1415926535897932384626433832795f
@@ -37,6 +37,7 @@ typedef struct {
 	bool is_dead;			//しんだ、画面外か
 	//int graphic[2];
 	int state;				//どのアニメーション画像のステートか
+	int count;
 	int x, y;					
 	int x_size, y_size;
 //	int wait_time;			//出現時間
@@ -59,6 +60,13 @@ typedef struct {
 	int loopNum;			//ループ回数
 }Background;
 
+typedef struct{
+	int x, y;
+	int state;	//アニメーションの状態
+	int count;	//アニメーション時のカウント
+	bool is_used;
+}Effect;
+
 
 void PlayerInit();
 void PlayerUpdate();
@@ -74,6 +82,7 @@ void EnemyUpdate();
 void EnemyDraw();
 //void EnemyLoad();
 void SpawnEnemy(int);
+void SpawnEffect(int, int);
 
 void ShotInit();
 void ShotUpdate();
@@ -101,7 +110,7 @@ extern Player player;
 extern Shot shot[MAX_TOMATO];
 extern Item item[MAX_TOMATO];
 extern Enemy enemy[MAX_ENEMY];
-extern Background background[2];
+extern Background background[MAX_STAGE];
 
 
 /*グラフィック系*/
@@ -115,6 +124,8 @@ extern int shasen_graphic;
 extern int background_graphic[MAX_STAGE];
 extern int enemy_graphic[MAX_ENEMY_TYPE][ENEMY_ANIMETION_NUM];
 extern int weather_graphic[3];
+extern int tomato_effect_graphic;
+extern int sand_effect_graphic[2];
 
 /*「scene」
 ゲームには、タイトル画面、メイン画面（ゲーム画面）、ゲームオーバー画面など、さまざまな画面がある。
