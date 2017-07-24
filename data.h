@@ -2,10 +2,10 @@
 
 #define MAX_TOMATO 255
 #define MAX_ITEM 5
-#define MAX_ENEMY 50
-#define MAX_ENEMY_TYPE 5
-#define MAX_STAGE 3
-#define CHANGE_BACKGROUND_BY_LOOP_NUM 5
+#define MAX_ENEMY 100
+#define MAX_ENEMY_TYPE 7
+#define MAX_STAGE 4
+#define CHANGE_BACKGROUND_BY_LOOP_NUM 3
 #define ENEMY_ANIMETION_NUM 2	//敵のアニメーションの画像数
 #define PI    3.1415926535897932384626433832795f
 
@@ -76,6 +76,7 @@ void PlayerShot();
 void PlayerCollision();
 void PlayerSpeedUp();
 void PlayerSpeedDown();
+void Damage(int);
 
 void EnemyInit();
 void EnemyUpdate();

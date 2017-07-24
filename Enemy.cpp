@@ -3,7 +3,7 @@
 #include "Key.h"
 #include <math.h>
 
-#define EFFECT_NUM 10
+#define EFFECT_NUM 25
 
 double total_distance = 0;
 double enemy_timer = 0;
@@ -100,12 +100,16 @@ void EnemyUpdate() {
 		}
 		else{
 			enemy[i].y += (player.speed + enemy[i].move_y);
-			enemy[i].x += enemy[i].move_x;
+			if (enemy[i].type == 3) {
+				enemy[i].x += sin(PI * 2 / 60 * timer) * enemy[i].move_x;
+			}else
+				enemy[i].x += enemy[i].move_x;
 			if (enemy[i].y > 480) {
 				enemy[i].is_dead = true;
 			}
 		}
 
+		//アニメーション処理
 		if (enemy[i].count > 10) {
 			enemy[i].state++;
 			enemy[i].count = 0;
@@ -136,7 +140,7 @@ void EnemyUpdate() {
 	}
 }
 
-//動物の敵出現時の関数
+//敵出現時の関数
 void SpawnEnemy(int n) {
 	int type;
 	int x = 0, y = 0;
@@ -144,7 +148,7 @@ void SpawnEnemy(int n) {
 	int rand_spawn = GetRand(2);
 	
 	//ステージで出てくる敵の種類を決める
-	switch (background[1].now_stage)
+	switch (background[0].now_stage)
 	{
 		case 0:
 			type = 0;
@@ -152,8 +156,12 @@ void SpawnEnemy(int n) {
 		case 1:
 			type = GetRand(2);
 			break;
+		case 2:
+			type = 4 + GetRand(2);
+		case 3:
+			return;
+			break;
 		default:
-			//return;
 			break;
 	}
 
@@ -185,14 +193,37 @@ void SpawnEnemy(int n) {
 		//ハクビシン
 		case 1:
 			x = GetRand(640);
-			y = -GetRand(10);
+			y = -GetRand(20);
 			break;
 		//イノシシ
 		case 2:
 			x = GetRand(640);
-			y = -GetRand(10);
+			y = -60;
 			m_y = GetRand(10);
 			SpawnEffect(x,5);
+			break;
+		case 3:
+			x = 100 + GetRand(220);
+			y = 500;
+			m_x = 2 + GetRand(5);
+			m_y = -6;
+			break;
+		//歩行者１
+		case 4:
+			x = 100;
+			y = -20;
+			break;
+		case 5:
+			x = 100;
+			y = -20;
+			m_x = GetRand(2);
+			m_y = 0;
+			break;
+		case 6:
+			x = 520;
+			y = -20;
+			m_x = -GetRand(2);
+			m_y = 0;
 			break;
 		default:
 			break;

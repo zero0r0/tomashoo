@@ -2,7 +2,6 @@
 #include "data.h"
 #include "Key.h"
 
-
 //プレイヤーの初期化の関数
 //位置、所持トマトなどを初期化する
 void PlayerInit() {
@@ -87,8 +86,8 @@ void PlayerShot() {
 	for (int i = 0; i < player.tomato; i++) {
 		if (shot[i].life == 0) {
 			shot[i].life = 1;
-			shot[i].x_size = 20;
-			shot[i].y_size = 20;
+			shot[i].x_size = 48;
+			shot[i].y_size = 48;
 			shot[i].x = player.x + player.x_size / 2 - shot[i].x_size / 2;
 			shot[i].y = player.y;
 
@@ -113,14 +112,34 @@ void PlayerCollision() {
 	else {
 		for (int i = 0; i < MAX_ENEMY; i++) {
 			if ((player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2))*(player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2)) + (player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2))*(player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2)) <= (player.r + enemy[i].r)*(player.r + enemy[i].r)) { //22日エッグ変更
-				player.life -= 1;
+				//player.life -= 1;
+				Damage(enemy[i].type);
 				player.safetime = 60;
-				if (enemy[i].type == 2 || enemy[i].type == 3 || enemy[i].type == 5) {
+				if (enemy[i].type == 2 || 4 <= enemy[i].type) {
 					scene = GAMEOVER;
 				}
 			}
 		}
 	}
+}
+
+void Damage(int type) {
+	int damage=0;
+	switch (type)
+	{
+		case 0:
+			damage = 1 + GetRand(2);
+			break;
+		case 1:
+			damage = 1 + GetRand(4);
+			player.speed--;
+			break;
+		default:
+			scene = GAMEOVER;
+			return;
+			break;
+	}
+	player.tomato -= damage;
 }
 
 void PlayerSpeedUp() {

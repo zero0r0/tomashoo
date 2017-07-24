@@ -19,5 +19,6 @@ void TitleUpdata() {
 
 //タイトルでの描画処理
 void TitleDraw() {
-	DrawString(0, 0, "とましゅーーーーーーーーー!!", GetColor(255, 255, 255));
+	//DrawString(0, 0, "とましゅーーーーーーーーー!!", GetColor(255, 255, 255));
+	//DrawGraph(0, 0, background_graphic[MAX_STAGE-1], true);
 }

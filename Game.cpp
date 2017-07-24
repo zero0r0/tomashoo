@@ -127,6 +127,9 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 				MainGameDraw();
 				break;
 			case GAMEOVER:
+				if (key_z > 0) {
+					scene = TITLE;
+				}
 				break;
 			default:
 				break;
@@ -147,13 +150,16 @@ void LoadGraphicAll() {
 	LoadDivGraph("Data/en02.png", 2, 2, 1, 48, 48, enemy_graphic[1]);
 	LoadDivGraph("Data/en03.png", 2, 2, 1, 48, 48, enemy_graphic[2]);
 	LoadDivGraph("Data/en04.png", 2, 2, 1, 48, 48, enemy_graphic[3]);
-//	LoadDivGraph("Data/en05.png", 2, 2, 1, 48, 48, enemy_graphic[4]);
+	LoadDivGraph("Data/en05c.png", 2, 2, 1, 48, 48, enemy_graphic[4]);
+	LoadDivGraph("Data/en05l.png", 2, 2, 1, 48, 48, enemy_graphic[5]);
+	LoadDivGraph("Data/en05r.png", 2, 2, 1, 48, 48, enemy_graphic[6]);
 
 	player.life_graphic = LoadGraph("Data/life.bmp");
 	shot_graphic = LoadGraph("Data/bl01.png");
 	background_graphic[0] = LoadGraph("Data/inaka.png");
 	background_graphic[1] = LoadGraph("Data/hatake.png");
 	background_graphic[2] = LoadGraph("Data/road.png");
+	background_graphic[3] = LoadGraph("Data/families.png");
 	speed_meter_graphic = LoadGraph("Data/speed_meter.png");
 	speed_needle_graphic = LoadGraph("Data/speed_needle.png");
 	weather_graphic[0] = LoadGraph("Data/weather_cloudy.png");
