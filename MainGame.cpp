@@ -13,6 +13,7 @@ void MainGameInit() {
 	ItemInit();
 	total_distance = 0;
 	timer = 0;
+	is_clear = false;
 }
 
 void MainGameUpdate() {
@@ -22,6 +23,11 @@ void MainGameUpdate() {
 	BackgroundUpdate();
 	ItemUpdate();
 	timer += (1.0) * mFps;
+	if (CheckHitKey(KEY_INPUT_RETURN) == 1 && is_clear) {
+		scene = TITLE;
+	}
+
+
 }
 
 void MainGameDraw() {
@@ -36,6 +42,6 @@ void MainGameDraw() {
 		}
 	}
 	DrawGraph(440,-5,weather_graphic[0],true);
-	DrawFormatString(400,400, GetColor(255, 255, 255),"enemy : %d %d", enemy[1].x, enemy[1].y);
-	//DrawFormatString(400, 420, GetColor(255, 255, 255), "stage : %lf", now_stage);
+	if(is_clear)
+		DrawFormatString(400,400, GetColor(255, 255, 255),"returnÉLÅ[Ç®ÇµÇƒ");
 }

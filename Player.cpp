@@ -2,6 +2,8 @@
 #include "data.h"
 #include "Key.h"
 
+#define MAX_SPEED 10
+
 //プレイヤーの初期化の関数
 //位置、所持トマトなどを初期化する
 void PlayerInit() {
@@ -23,6 +25,7 @@ void PlayerInit() {
 //プレイヤーの動作で追加がある場合ここに書いていく
 void PlayerUpdate() {
 	
+	//アニメーション
 	if (player.count > 10) {
 		player.anim_count++;
 		player.count = 0;
@@ -30,16 +33,17 @@ void PlayerUpdate() {
 	else {
 		player.count++;
 	}
+
 	PlayerMovement();
 	PlayerCollision();
 	//トリガーを-1する
 	player.shot_trigger--;
 	//Zキーが押されていて、かつトリガーが0以下だったら弾丸を発射する
-	if (key_z > 0 && player.shot_trigger <= 0) {
+	if (key_z > 0 && player.shot_trigger <= 0 && player.tomato > 0) {
 		PlayerShot();
 		player.tomato -= 1;
 	}
-	if (key_up == 1) {
+	if (key_up == 1 && player.speed < MAX_SPEED) {
 		PlayerSpeedUp();
 	}
 	else if(key_down == 1 && player.speed >= 1){
@@ -57,7 +61,7 @@ void PlayerDraw() {
 		DrawGraph(player.x, player.y, player.graphic[player.anim_count%2], TRUE);
 	
 	DrawGraph(150, 440, speed_meter_graphic, TRUE);
-	DrawRotaGraph2(335, 490, 20, 40, 1.0, (PI * (double)(player.speed / 10.0) - PI/2), speed_needle_graphic, TRUE);
+	DrawRotaGraph2(335, 490, 20, 40, 1.0, (PI * (double)(player.speed / MAX_SPEED) - PI/2), speed_needle_graphic, TRUE);
 	DrawGraph(100, 400, font_num_graphic[player.tomato%10], true);
 	DrawGraph(65, 400, font_num_graphic[(player.tomato /10 ) %10], true);
 	DrawGraph(30, 400, font_num_graphic[(player.tomato /100 ) %10], true);

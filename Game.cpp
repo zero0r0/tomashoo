@@ -22,6 +22,8 @@ int const TITLE = 0;
 int const MAIN = 1;
 int const GAMEOVER = 2;
 
+bool is_clear = false;
+
 //グラフィック系
 int shot_graphic;
 int tomato_graphic;

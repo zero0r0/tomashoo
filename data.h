@@ -149,3 +149,5 @@ extern float mFps;          //fps
 extern const int N;	//•½‹Ï‚ğæ‚éƒTƒ“ƒvƒ‹”
 extern const int FPS;	//İ’è‚µ‚½FPS
 
+extern bool is_clear;
+extern bool last_stage;

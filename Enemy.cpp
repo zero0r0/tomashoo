@@ -8,6 +8,7 @@
 double total_distance = 0;
 double enemy_timer = 0;
 Effect sand_effect[EFFECT_NUM];
+int en = 0;
 
 /*
 void EnemyLoad() {
@@ -84,7 +85,7 @@ void EnemyUpdate() {
 	enemy_timer += (double)player.speed * (1.0 / mFps);
 	
 	//一定時間で敵を出現させる
-	if (enemy_timer > 1.6)
+	if (enemy_timer > 2.0)
 		is_spawn = true;
 	else
 		is_spawn = false;
@@ -100,10 +101,10 @@ void EnemyUpdate() {
 		}
 		else{
 			enemy[i].y += (player.speed + enemy[i].move_y);
-			if (enemy[i].type == 3) {
-				enemy[i].x += sin(PI * 2 / 60 * timer) * enemy[i].move_x;
-			}else
-				enemy[i].x += enemy[i].move_x;
+			enemy[i].x += enemy[i].move_x;
+			//if (enemy[i].type == 3) {
+			//	enemy[i].x += sin(PI * 2 / 60 * timer) * enemy[i].move_x;
+			//}else
 			if (enemy[i].y > 480) {
 				enemy[i].is_dead = true;
 			}
@@ -142,11 +143,14 @@ void EnemyUpdate() {
 
 //敵出現時の関数
 void SpawnEnemy(int n) {
-	int type;
+	int type = 0;
 	int x = 0, y = 0;
-	int m_x=0, m_y=0;
+	int m_x = 0, m_y = 0;
 	int rand_spawn = GetRand(2);
-	
+
+	if (last_stage)
+		return;
+
 	//ステージで出てくる敵の種類を決める
 	switch (background[0].now_stage)
 	{
@@ -159,11 +163,12 @@ void SpawnEnemy(int n) {
 		case 2:
 			type = 4 + GetRand(2);
 		case 3:
-			return;
+			type = 4 + GetRand(2);
 			break;
 		default:
 			break;
 	}
+	en = type;
 
 	//敵によって出現方法や移動量を変える
 	switch (type)
@@ -245,6 +250,7 @@ void SpawnEffect(int x, int y) {
 			sand_effect[i].count = 0;
 			sand_effect[i].state = 0;
 			sand_effect[i].is_used = true;
+			break;
 		}
 	}
 }
@@ -263,6 +269,6 @@ void EnemyDraw() {
 			DrawGraph(sand_effect[i].x, sand_effect[i].y, sand_effect_graphic[sand_effect[i].state%2],true);
 		}
 	}
-
-	DrawFormatString(400, 440, GetColor(255, 255, 255), "%lf", enemy_timer);
+	//DrawFormatString(400, 420, GetColor(255, 255, 255), "stage : %d", background[0].now_stage);
+	//DrawFormatString(400, 440, GetColor(255, 255, 255), "%d", en);
 }

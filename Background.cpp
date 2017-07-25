@@ -6,6 +6,7 @@ int now_stage = 0;
 bool last_stage = false;
 
 void BackgroundInit() {
+	last_stage = false;
 	background[0].x = 0;
 	background[0].y = -480;
 	background[0].now_stage = 0;
@@ -33,6 +34,7 @@ void BackgroundUpdate() {
 				&& background[i].now_stage < MAX_STAGE - 1) {
 				background[i].loopNum = 0;
 				background[i].now_stage++;
+				//background[i].now_stage %= 2;
 
 				if (background[i].now_stage == MAX_STAGE - 1) {
 					background[i].y_size = 1920;
@@ -56,8 +58,10 @@ void BackgroundUpdate() {
 	}
 	for (int i = 0; i < 2; i++) {
 		//ƒS[ƒ‹•t‹ß‚Å”wŒiƒXƒgƒbƒv
-		if (background[0].now_stage == MAX_STAGE - 1 && background[0].y > -200)
-			;//background[i].y = 0;
+		if (background[0].now_stage == MAX_STAGE - 1 && background[0].y > -200) {
+			is_clear = true;//background[i].y = 0;
+			player.speed = 0;
+		}
 		else
 			background[i].y += player.speed;
 	}
