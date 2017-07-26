@@ -19,6 +19,9 @@ void PlayerInit() {
 	player.count = 0;
 	player.anim_count = 0;
 	player.r = 10;
+	//25日エッグ変更
+	player.time = 60;
+	player.fleam_count = 0;
 }
 
 //プレイヤー更新関数
@@ -33,6 +36,13 @@ void PlayerUpdate() {
 	else {
 		player.count++;
 	}
+
+	//25日エッグ変更
+	if (player.fleam_count % 60 == 0 && !is_clear
+		) {
+		player.time--;
+	}
+	player.fleam_count++;
 
 	PlayerMovement();
 	PlayerCollision();
@@ -67,6 +77,16 @@ void PlayerDraw() {
 	DrawGraph(30, 400, font_num_graphic[(player.tomato /100 ) %10], true);
 	DrawGraph(140, 400, shasen_graphic, true);
 	DrawGraph(30, 365, font_tomato_graphic, true);
+	//25日エッグ変更
+	DrawGraph(450, 355, font_timeup_graphic[0], true);
+	DrawGraph(550, 355, font_timeup_graphic[1], true);
+	DrawGraph(450, 420, font_timeup_graphic[2], true);
+	DrawGraph(510, 400, font_num_graphic[player.time % 10], true);
+	DrawGraph(475, 400, font_num_graphic[(player.time / 10) % 10], true);
+	DrawGraph(560, 420, font_timeup_graphic[3], true);
+	DrawGraph(15, 10, font_length_graphic[0], true);
+	DrawGraph(85, 20, font_num_graphic[(320 - (int)total_distance) / 10 % 10], true);
+	DrawGraph(120, 20, font_num_graphic[(320 - (int)total_distance) % 10], true);
 	//DrawCircle(player.x + 24, player.y + 24, player.r, GetColor(255, 255, 255), true);
 }
 

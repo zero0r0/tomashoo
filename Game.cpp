@@ -23,10 +23,12 @@ int const MAIN = 1;
 int const GAMEOVER = 2;
 
 bool is_clear = false;
+int weather_number;
+
 
 //グラフィック系
 int shot_graphic;
-int tomato_graphic;
+int tomato_item_graphic[2];
 int speed_meter_graphic;
 int speed_needle_graphic;
 int background_graphic[MAX_STAGE];
@@ -35,8 +37,11 @@ int weather_graphic[3];
 int font_num_graphic[10];
 int font_tomato_graphic;
 int shasen_graphic;
-int tomato_effect_graphic;
+int tomato_effect_graphic[2];
 int sand_effect_graphic[2];
+//25日エッグ変更
+int font_timeup_graphic[4];
+int font_length_graphic[2];
 
 
 /*----------FPS関連-----------------*/
@@ -157,6 +162,14 @@ void LoadGraphicAll() {
 	LoadDivGraph("Data/en05r.png", 2, 2, 1, 48, 48, enemy_graphic[6]);
 
 	player.life_graphic = LoadGraph("Data/life.bmp");
+	
+	//25日エッグ変更
+	font_timeup_graphic[0] = LoadGraph("Data/font.timeup.png");
+	font_timeup_graphic[1] = LoadGraph("Data/font.made.png");
+	font_timeup_graphic[2] = LoadGraph("Data/font.ato.png");
+	font_timeup_graphic[3] = LoadGraph("Data/font.byou.png");
+	//
+	
 	shot_graphic = LoadGraph("Data/bl01.png");
 	background_graphic[0] = LoadGraph("Data/inaka.png");
 	background_graphic[1] = LoadGraph("Data/hatake.png");
@@ -167,7 +180,6 @@ void LoadGraphicAll() {
 	weather_graphic[0] = LoadGraph("Data/weather_cloudy.png");
 	weather_graphic[1] = LoadGraph("Data/weather_rainy.png");
 	weather_graphic[2] = LoadGraph("Data/weather_sunny.png");
-	tomato_graphic = LoadGraph("Data/tomato.png");
 	font_num_graphic[0] = LoadGraph("Data/font0.png");
 	font_num_graphic[1] = LoadGraph("Data/font1.png");
 	font_num_graphic[2] = LoadGraph("Data/font2.png");
@@ -180,8 +192,15 @@ void LoadGraphicAll() {
 	font_num_graphic[9] = LoadGraph("Data/font9.png");
 	font_tomato_graphic = LoadGraph("Data/font.tomato.png");
 	shasen_graphic = LoadGraph("Data/shasen.png");
+
+	//25日エッグ変更
+	font_length_graphic[0] = LoadGraph("Data/font.nokori.png");	//25日エッグ変更
+	shasen_graphic = LoadGraph("Data/shasen.png");
+	//
+	LoadDivGraph("Data/it01.png", 2, 2, 1, 48, 48, tomato_item_graphic);
+
 	LoadDivGraph("Data/ef02.png", 2, 2, 1, 48, 48, sand_effect_graphic);
-	tomato_effect_graphic = LoadGraph("Data/tubureta_tomato.png");
+	LoadDivGraph("Data/ef01.png", 2, 2, 1, 48, 48, tomato_effect_graphic);
 }
 
 void DeleteGraphicAll() {
@@ -203,19 +222,27 @@ void DeleteGraphicAll() {
 	for (int i = 0; i < 10; i++) {
 		DeleteGraph(font_num_graphic[i]);
 	}
-	
-	for (int i = 0; i < 2; i++) {
-		DeleteGraph(sand_effect_graphic[i]);
-	}
-	DeleteGraph(tomato_effect_graphic);
 
+	for (int i = 0; i < 4; i++) {
+		DeleteGraph(font_timeup_graphic[i]);
+	}
+
+	for (int i = 0; i < 1; i++) {
+		DeleteGraph(font_length_graphic[i]);
+	}
+
+	for (int i = 0; i < 2; i++) {
+		DeleteGraph(tomato_effect_graphic[i]);
+		DeleteGraph(tomato_item_graphic[i]);
+		DeleteGraph(sand_effect_graphic[i]);
+
+	}
 	DeleteGraph(speed_meter_graphic);
 	DeleteGraph(speed_needle_graphic);
-	DeleteGraph(tomato_graphic);
 	DeleteGraph(font_tomato_graphic);
 	DeleteGraph(shasen_graphic);
 }
 
 void TestMessage() {
-	DrawFormatString(100, 100, GetColor(255, 255, 255), "変数 scene の値は %d です", scene);
+	//DrawFormatString(100, 100, GetColor(255, 255, 255), "変数 scene の値は %d です", scene);
 }

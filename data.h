@@ -23,6 +23,9 @@ typedef struct {
 	int anim_count;			//countが一定数たまったら++する
 	int count;				//マイフレームカウントしていく
 	int r;
+	//25日エッグ変更
+	int time;
+	int fleam_count;
 }Player;
 
 typedef struct {
@@ -51,6 +54,8 @@ typedef struct {
 	int x, y;
 	int x_size, y_size;
 	int r;
+	int state;	//アニメーションの状態
+	int count;	//アニメーション時のカウント
 }Item;
 
 typedef struct {
@@ -115,7 +120,7 @@ extern Background background[MAX_STAGE];
 
 
 /*グラフィック系*/
-extern int tomato_graphic;
+extern int tomato_item_graphic[2];
 extern int shot_graphic;
 extern int speed_meter_graphic;
 extern int speed_needle_graphic;
@@ -125,8 +130,15 @@ extern int shasen_graphic;
 extern int background_graphic[MAX_STAGE];
 extern int enemy_graphic[MAX_ENEMY_TYPE][ENEMY_ANIMETION_NUM];
 extern int weather_graphic[3];
-extern int tomato_effect_graphic;
+extern int tomato_effect_graphic[2];
 extern int sand_effect_graphic[2];
+//25日エッグ変更
+extern int font_timeup_graphic[4];
+
+
+//25日エッグ変更
+extern int weather_number;
+extern int font_length_graphic[2];
 
 /*「scene」
 ゲームには、タイトル画面、メイン画面（ゲーム画面）、ゲームオーバー画面など、さまざまな画面がある。

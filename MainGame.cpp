@@ -14,6 +14,8 @@ void MainGameInit() {
 	total_distance = 0;
 	timer = 0;
 	is_clear = false;
+	//25日エッグ変更
+	weather_number = GetRand(2);
 }
 
 void MainGameUpdate() {
@@ -41,7 +43,10 @@ void MainGameDraw() {
 			//DrawCircle(shot[i].x + 24, shot[i].y + 24, shot[i].r, GetColor(255, 255, 255), true);
 		}
 	}
-	DrawGraph(440,-5,weather_graphic[0],true);
+	//DrawGraph(440,-5,weather_graphic[0],true);
+
+	//25日エッグ変更    
+	DrawGraph(440, -5, weather_graphic[weather_number], true);
 	if(is_clear)
 		DrawFormatString(400,400, GetColor(255, 255, 255),"returnキーおして");
 }
