@@ -25,6 +25,10 @@ void MainGameUpdate() {
 	BackgroundUpdate();
 	ItemUpdate();
 	//timer += (1.0) * mFps;
+	//27日エッグ変更
+	if (!is_clear) {
+		total_distance += player.speed;//* (1.0 / mFps);
+	}
 	if (CheckHitKey(KEY_INPUT_RETURN) == 1 && is_clear) {
 		scene = TITLE;
 	}

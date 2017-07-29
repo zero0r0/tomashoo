@@ -4,7 +4,7 @@
 #include <math.h>
 
 
-double total_distance = 0;
+int total_distance = 0;
 double enemy_timer = 0;
 Effect sand_effect[EFFECT_NUM];
 int en = 0;

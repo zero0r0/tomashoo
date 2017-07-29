@@ -154,7 +154,7 @@ extern int const MAIN;
 extern int const GAMEOVER;
 extern int scene;
 
-extern double total_distance;
+extern int total_distance;
 extern double timer;
 
 /*----------FPSŠÖ˜A-----------------*/

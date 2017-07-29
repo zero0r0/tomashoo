@@ -77,6 +77,8 @@ void PlayerDraw() {
 	DrawGraph(30, 400, font_num_graphic[(player.tomato /100 ) %10], true);
 	DrawGraph(140, 400, shasen_graphic, true);
 	DrawGraph(30, 365, font_tomato_graphic, true);
+
+	//プレイヤーの距離の描画
 	//25日エッグ変更
 	DrawGraph(450, 355, font_timeup_graphic[0], true);
 	DrawGraph(550, 355, font_timeup_graphic[1], true);
@@ -85,9 +87,13 @@ void PlayerDraw() {
 	DrawGraph(475, 400, font_num_graphic[(player.time / 10) % 10], true);
 	DrawGraph(560, 420, font_timeup_graphic[3], true);
 	DrawGraph(15, 10, font_length_graphic[0], true);
-	DrawGraph(85, 20, font_num_graphic[(320 - (int)total_distance) / 10 % 10], true);
-	DrawGraph(120, 20, font_num_graphic[(320 - (int)total_distance) % 10], true);
+	//DrawGraph(85, 20, font_num_graphic[(320 - total_distance) / 10 % 10], true);
+	//DrawGraph(120, 20, font_num_graphic[(320 - total_distance) % 10], true);
 	//DrawCircle(player.x + 24, player.y + 24, player.r, GetColor(255, 255, 255), true);
+	//27日エッグ変更
+	DrawGraph(85, 20, font_num_graphic[((int)((18513 - total_distance)* (1.0 / 185))) / 100 % 10], true);
+	DrawGraph(120, 20, font_num_graphic[((int)((18513 - total_distance)* (1.0 / 185))) / 10 % 10], true);
+	DrawGraph(155, 20, font_num_graphic[((int)((18513 - total_distance)* (1.0 / 185))) % 10], true);
 }
 
 ///
@@ -113,8 +119,8 @@ void PlayerShot() {
 			shot[i].x_size = 48;
 			shot[i].y_size = 48;
 			shot[i].x = player.x + player.x_size / 2 - shot[i].x_size / 2;
-			shot[i].y = player.y;
-
+			//27日エッグ変更
+			shot[i].y = player.y - 30;
 			//トリガーを設定
 			player.shot_trigger = 10;
 			break;		//ループから脱出
