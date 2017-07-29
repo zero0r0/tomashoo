@@ -15,7 +15,7 @@ Player player;
 Shot shot[MAX_TOMATO];
 Item item[MAX_TOMATO];
 Enemy enemy[MAX_ENEMY];
-Background background[MAX_STAGE];
+Background background[2];
 
 int scene;
 int const TITLE = 0;
@@ -160,6 +160,7 @@ void LoadGraphicAll() {
 	LoadDivGraph("Data/en05c.png", 2, 2, 1, 48, 48, enemy_graphic[4]);
 	LoadDivGraph("Data/en05l.png", 2, 2, 1, 48, 48, enemy_graphic[5]);
 	LoadDivGraph("Data/en05r.png", 2, 2, 1, 48, 48, enemy_graphic[6]);
+	LoadDivGraph("Data/en06a.png", 2, 2, 1, 48, 48, enemy_graphic[7]);
 
 	player.life_graphic = LoadGraph("Data/life.bmp");
 	

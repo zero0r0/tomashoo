@@ -3,7 +3,6 @@
 #include "Key.h"
 #include <math.h>
 
-#define EFFECT_NUM 25
 
 double total_distance = 0;
 double enemy_timer = 0;
@@ -63,7 +62,7 @@ void EnemyInit() {
 		enemy[i].r = 15;
 	}
 
-	//イノシシ用のエフェクト初期化
+	//エフェクト初期化
 	for (int i = 0; i < EFFECT_NUM; i++) {
 		sand_effect[i].x = -10;
 		sand_effect[i].y = -10;
@@ -85,27 +84,30 @@ void EnemyUpdate() {
 	enemy_timer += (double)player.speed * (1.0 / mFps);
 	
 	//一定時間で敵を出現させる
-	if (enemy_timer > 2.0)
-		is_spawn = true;
-	else
-		is_spawn = false;
+	//if (enemy_timer > 2.0)
+	//	is_spawn = true;
+	//else
+	//	is_spawn = false;
 	
 
 	for (int i = 0; i < MAX_ENEMY; i++) {
 		if (enemy[i].is_dead) {
-			if (is_spawn) {
-				SpawnEnemy(i);
-				is_spawn = false;
-				enemy_timer = 0;
-			}
+			//if (is_spawn) {
+			//	SpawnEnemy(i);
+			//	is_spawn = false;
+			//	enemy_timer = 0;
+			//}
 		}
 		else{
-			enemy[i].y += (player.speed + enemy[i].move_y);
-			enemy[i].x += enemy[i].move_x;
-			//if (enemy[i].type == 3) {
-			//	enemy[i].x += sin(PI * 2 / 60 * timer) * enemy[i].move_x;
-			//}else
-			if (enemy[i].y > 480) {
+			enemy[i].y += player.speed;
+			if (enemy[i].y > BEGINING_MOVE_Y) {
+				enemy[i].x += enemy[i].move_x;
+				enemy[i].y += enemy[i].move_y;
+				//if (enemy[i].type == 3) {
+				//	enemy[i].x += sin(PI * 2 / 60 * timer) * enemy[i].move_x;
+				//}else
+			}
+			if (enemy[i].y > 500) {
 				enemy[i].is_dead = true;
 			}
 		}
@@ -142,9 +144,9 @@ void EnemyUpdate() {
 }
 
 //敵出現時の関数
-void SpawnEnemy(int n) {
+void SpawnEnemy(int n, int stage, int enemy_num) {
 	int type = 0;
-	int x = 0, y = 0;
+	int x = 0, y = -480 / ENEMY_SPAWN_NUM;
 	int m_x = 0, m_y = 0;
 	int rand_spawn = GetRand(2);
 
@@ -152,7 +154,7 @@ void SpawnEnemy(int n) {
 		return;
 
 	//ステージで出てくる敵の種類を決める
-	switch (background[0].now_stage)
+	switch (stage)
 	{
 		case 0:
 			type = 0;
@@ -162,13 +164,11 @@ void SpawnEnemy(int n) {
 			break;
 		case 2:
 			type = 4 + GetRand(2);
-		case 3:
-			type = 4 + GetRand(2);
 			break;
-		default:
-			break;
+		//default:
+		//	return;
+		//	break;
 	}
-	en = type;
 
 	//敵によって出現方法や移動量を変える
 	switch (type)
@@ -177,15 +177,15 @@ void SpawnEnemy(int n) {
 		case 0:
 			if (rand_spawn == 0) {
 				x = GetRand(640);
-				y = -GetRand(20);
+				//y = -GetRand(480);
 			}
 			else if (rand_spawn == 1) {
-				x = -GetRand(20);
-				y = GetRand(240);
+				x = -GetRand(50);
+				//y = GetRand(480);
 			}
 			else {
-				x = 640 + GetRand(20);
-				y = GetRand(240);
+				x = 640 + GetRand(50);
+				//y = GetRand(480);
 			}
 
 			if (x < 360)
@@ -193,46 +193,46 @@ void SpawnEnemy(int n) {
 			else
 				m_x = (-2) * (1 + GetRand(4));
 			m_y = GetRand(4);
-
 			break;
 		//ハクビシン
 		case 1:
 			x = GetRand(640);
-			y = -GetRand(20);
+			//y = -GetRand(480);
 			break;
 		//イノシシ
 		case 2:
 			x = GetRand(640);
-			y = -60;
+			//y = -GetRand(480);
 			m_y = GetRand(10);
 			SpawnEffect(x,5);
 			break;
 		case 3:
 			x = 100 + GetRand(220);
-			y = 500;
+			//y = 480;
 			m_x = 2 + GetRand(5);
 			m_y = -6;
 			break;
 		//歩行者１
 		case 4:
 			x = 100;
-			y = -20;
+			//y = -GetRand(480);
 			break;
 		case 5:
 			x = 100;
-			y = -20;
+			//y = -GetRand(480);
 			m_x = GetRand(2);
 			m_y = 0;
 			break;
 		case 6:
 			x = 520;
-			y = -20;
+			//y = -GetRand(480);
 			m_x = -GetRand(2);
 			m_y = 0;
 			break;
 		default:
 			break;
 	}
+	y = y * enemy_num;
 
 	enemy[n].x = x;
 	enemy[n].y = y;

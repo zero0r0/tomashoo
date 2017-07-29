@@ -108,8 +108,8 @@ void PlayerShot() {
 
 	//使用されていない弾丸を探し、見つけたら情報をセットして抜け出す
 	for (int i = 0; i < player.tomato; i++) {
-		if (shot[i].life == 0) {
-			shot[i].life = 1;
+		if (!shot[i].is_active) {
+			shot[i].is_active = true;
 			shot[i].x_size = 48;
 			shot[i].y_size = 48;
 			shot[i].x = player.x + player.x_size / 2 - shot[i].x_size / 2;

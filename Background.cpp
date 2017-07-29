@@ -28,16 +28,21 @@ void BackgroundUpdate() {
 
 		//”wŒi‚ª‰º‚Ü‚ÅƒXƒNƒ[ƒ‹‚µ‚½‚ç
 		if (background[i].y >= 480) {
-
-			//”wŒi‚ð•Ï‚¦‚é‚Æ‚«‚Ìˆ—
+			//”wŒi‚ð•Ï‚¦‚é‚Æ‚«‚Ìˆ—(”wŒi‚ªˆê’è‰ñ”ƒ‹[ƒv‚µ‚½‚ç)
 			if (background[i].loopNum >= CHANGE_BACKGROUND_BY_LOOP_NUM
 				&& background[i].now_stage < MAX_STAGE - 1) {
+				//ƒ‹[ƒv‰ñ”ƒŠƒZƒbƒg‚µ‚Ä”wŒi‚ðXV
 				background[i].loopNum = 0;
 				background[i].now_stage++;
-				//background[i].now_stage %= 2;
-
-				if (background[i].now_stage == MAX_STAGE - 1) {
+				//ÅIƒXƒe[ƒW‚¾‚Á‚½ê‡
+				if(background[i].now_stage == MAX_STAGE - 1) {
 					background[i].y_size = 1920;
+					enemy[0].x = 1500;
+					enemy[0].y = -1055;
+					enemy[0].move_x = 10;
+					enemy[0].move_y = 0;
+					enemy[0].type = 7;
+					enemy[0].is_dead = false;
 					if (i == 1)
 						last_stage = true;
 				}else {
@@ -46,12 +51,21 @@ void BackgroundUpdate() {
 			}
 			//”wŒi‚É•Ï‰»‚ª‚È‚¢ê‡
 			else {
-
 				//”wŒi‚ª”¨‚Ìê‡‚ÍƒAƒCƒeƒ€‚ðo‚·B
 				if (background[i].now_stage == 1)
 					SpawnItem(i);
 				background[i].loopNum++;
 
+				//“G‚ð”z’u
+				int enemy_num_count = 0;
+				for (int j = 0; j < MAX_ENEMY; j++) {
+					if (enemy[j].is_dead) {
+						SpawnEnemy(j, background[i].now_stage, enemy_num_count);
+						enemy_num_count++;
+						if (ENEMY_SPAWN_NUM <= enemy_num_count)
+							break;
+					}
+				}
 			}
 			background[i].y -= 480 + background[i].y_size;
 		}
@@ -67,6 +81,7 @@ void BackgroundUpdate() {
 	}
 }
 
+//•`‰æ
 void BackgroundDraw() {
 	DrawGraph(background[0].x, background[0].y, background_graphic[background[0].now_stage], true);
 	if(!last_stage)

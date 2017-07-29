@@ -3,11 +3,14 @@
 #define MAX_TOMATO 255
 #define MAX_ITEM 5
 #define MAX_ENEMY 100
-#define MAX_ENEMY_TYPE 7
+#define ENEMY_SPAWN_NUM 5
+#define MAX_ENEMY_TYPE 8
 #define MAX_STAGE 4
 #define CHANGE_BACKGROUND_BY_LOOP_NUM 3
 #define ENEMY_ANIMETION_NUM 2	//敵のアニメーションの画像数
 #define PI    3.1415926535897932384626433832795f
+#define EFFECT_NUM 25
+#define BEGINING_MOVE_Y -25
 
 /*オブジェクト系*/
 typedef struct {
@@ -29,21 +32,20 @@ typedef struct {
 }Player;
 
 typedef struct {
-	int life;	
+	//int life;	
+	bool is_active;
 	int x, y;				//xy座標
 	int x_size, y_size;		//x.y大きさ
 	int r;
 }Shot;
 
 typedef struct {
-	bool is_appeared;		//出現したかどうか
+	//bool is_appeared;		//出現したかどうか
 	bool is_dead;			//しんだ、画面外か
-	//int graphic[2];
 	int state;				//どのアニメーション画像のステートか
 	int count;
 	int x, y;					
 	int x_size, y_size;
-//	int wait_time;			//出現時間
 	int type;				//1:カラス、2:はくび、3:イノシシ 4.歩行,5,不良
 	int move_x;				
 	int move_y;				
@@ -87,7 +89,7 @@ void EnemyInit();
 void EnemyUpdate();
 void EnemyDraw();
 //void EnemyLoad();
-void SpawnEnemy(int);
+void SpawnEnemy(int,int, int);
 void SpawnEffect(int, int);
 
 void ShotInit();
@@ -116,7 +118,9 @@ extern Player player;
 extern Shot shot[MAX_TOMATO];
 extern Item item[MAX_TOMATO];
 extern Enemy enemy[MAX_ENEMY];
-extern Background background[MAX_STAGE];
+extern Background background[2];
+extern Effect tomato_effect[MAX_TOMATO];
+
 
 
 /*グラフィック系*/
