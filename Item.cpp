@@ -6,8 +6,8 @@
 void ItemInit() {
 
 	for (int i = 0; i < 5; i++) {
-		item[i].x = -10;
-		item[i].y = -10;
+		item[i].x = -100;
+		item[i].y = -100;
 		item[i].x_size = 48;
 		item[i].y_size = 48;
 		item[i].r = 17;

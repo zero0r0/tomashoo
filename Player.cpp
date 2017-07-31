@@ -2,7 +2,10 @@
 #include "data.h"
 #include "Key.h"
 
-#define MAX_SPEED 10
+//30日エッグ変更
+#define MAX_SPEED 10.0
+//30日エッグ変更
+int length = 0;
 
 //プレイヤーの初期化の関数
 //位置、所持トマトなどを初期化する
@@ -20,7 +23,7 @@ void PlayerInit() {
 	player.anim_count = 0;
 	player.r = 10;
 	//25日エッグ変更
-	player.time = 60;
+	player.time = TIME_LIMIT;
 	player.fleam_count = 0;
 }
 
@@ -67,15 +70,25 @@ void PlayerDraw() {
 	/*	player_safetimeを2で割った余りを算出し、それが0ならば描画するようにする
 	すると、セーフタイム中はプレイヤーが点滅するようになる
 	*/
-	if (player.safetime % 2 == 0)
-		DrawGraph(player.x, player.y, player.graphic[player.anim_count%2], TRUE);
-	
+	//if (player.safetime % 2 == 0)
+	//	DrawGraph(player.x, player.y, player.graphic[player.anim_count%2], TRUE);
+	if (player.safetime % 2 == 0) {
+		//30日エッグ変更
+		if (key_z > 0 && player.tomato > 0)
+			DrawGraph(player.x, player.y, player.graphic[1][player.anim_count % 2], TRUE);
+		else DrawGraph(player.x, player.y, player.graphic[0][player.anim_count % 2], TRUE);
+		//
+	}
 	DrawGraph(150, 440, speed_meter_graphic, TRUE);
 	DrawRotaGraph2(335, 490, 20, 40, 1.0, (PI * (double)(player.speed / MAX_SPEED) - PI/2), speed_needle_graphic, TRUE);
-	DrawGraph(100, 400, font_num_graphic[player.tomato%10], true);
+	DrawGraph(100, 400, font_num_graphic[player.tomato %10], true);
 	DrawGraph(65, 400, font_num_graphic[(player.tomato /10 ) %10], true);
 	DrawGraph(30, 400, font_num_graphic[(player.tomato /100 ) %10], true);
 	DrawGraph(140, 400, shasen_graphic, true);
+	//30日エッグ変更
+	DrawGraph(230, 400, font_num_graphic[0], true);
+	DrawGraph(195, 400, font_num_graphic[5], true);
+	DrawGraph(160, 400, font_num_graphic[0], true);
 	DrawGraph(30, 365, font_tomato_graphic, true);
 
 	//プレイヤーの距離の描画
@@ -90,10 +103,10 @@ void PlayerDraw() {
 	//DrawGraph(85, 20, font_num_graphic[(320 - total_distance) / 10 % 10], true);
 	//DrawGraph(120, 20, font_num_graphic[(320 - total_distance) % 10], true);
 	//DrawCircle(player.x + 24, player.y + 24, player.r, GetColor(255, 255, 255), true);
-	//27日エッグ変更
-	DrawGraph(85, 20, font_num_graphic[((int)((18513 - total_distance)* (1.0 / 185))) / 100 % 10], true);
-	DrawGraph(120, 20, font_num_graphic[((int)((18513 - total_distance)* (1.0 / 185))) / 10 % 10], true);
-	DrawGraph(155, 20, font_num_graphic[((int)((18513 - total_distance)* (1.0 / 185))) % 10], true);
+	DrawGraph(85, 20, font_num_graphic[length / 100 % 10], true);
+	DrawGraph(120, 20, font_num_graphic[length / 10 % 10], true);
+	DrawGraph(155, 20, font_num_graphic[length % 10], true);
+	DrawGraph(200, 50, font_length_graphic[1], true);
 }
 
 ///
@@ -105,9 +118,9 @@ void PlayerMovement() {
 	if (key_right > 0)	player.x += 4;
 	//プレイヤーが画面外に出ないようにする
 	if (player.x < 0)			player.x = 0;
-	if (player.x + 40 > 480)	player.x = 480 - 40;
+	if (player.x  > 640)	player.x = 640;
 	if (player.y < 0)			player.y = 0;
-	if (player.y + 40 > 480)	player.y = 480 - 40;
+	if (player.y  > 480)	player.y = 480;
 }
 
 void PlayerShot() {
@@ -146,7 +159,7 @@ void PlayerCollision() {
 				Damage(enemy[i].type);
 				player.safetime = 60;
 				if (enemy[i].type == 2 || 4 <= enemy[i].type) {
-					scene = GAMEOVER;
+					GameoverInit(3);
 				}
 			}
 		}

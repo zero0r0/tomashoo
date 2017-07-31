@@ -2,19 +2,20 @@
 
 #define MAX_TOMATO 255
 #define MAX_ITEM 5
-#define MAX_ENEMY 100
+#define MAX_ENEMY 125
 #define ENEMY_SPAWN_NUM 5
-#define MAX_ENEMY_TYPE 8
+#define MAX_ENEMY_TYPE 11
 #define MAX_STAGE 4
 #define CHANGE_BACKGROUND_BY_LOOP_NUM 3
 #define ENEMY_ANIMETION_NUM 2	//敵のアニメーションの画像数
 #define PI    3.1415926535897932384626433832795f
 #define EFFECT_NUM 25
 #define BEGINING_MOVE_Y -25
+#define TIME_LIMIT 60
 
 /*オブジェクト系*/
 typedef struct {
-	int graphic[2];			//プレイヤー画像
+	int graphic[2][2];			//プレイヤー画像
 	int x, y;				//xy座標
 	int x_size, y_size;		//x.y大きさ
 	int life;				//ライ
@@ -112,6 +113,15 @@ void MainGameInit();
 void MainGameUpdate();
 void MainGameDraw();
 
+void GameoverInit(int);
+void GameoverUpdate();
+void GameoverDraw();
+
+void GameClearInit();
+void GameClearUpdate();
+void GameClearDraw();
+
+
 //int Lerp(int,int,int,int,int);
 
 extern Player player;
@@ -136,13 +146,16 @@ extern int enemy_graphic[MAX_ENEMY_TYPE][ENEMY_ANIMETION_NUM];
 extern int weather_graphic[3];
 extern int tomato_effect_graphic[2];
 extern int sand_effect_graphic[2];
-//25日エッグ変更
 extern int font_timeup_graphic[4];
-
-
-//25日エッグ変更
 extern int weather_number;
 extern int font_length_graphic[2];
+extern int gameover_graphic[4];
+extern int gameclear_graphic;
+
+//サウンド系
+extern int stage_bgm[2];
+extern int gameover_bgm[2];
+
 
 /*「scene」
 ゲームには、タイトル画面、メイン画面（ゲーム画面）、ゲームオーバー画面など、さまざまな画面がある。
@@ -152,9 +165,12 @@ extern int font_length_graphic[2];
 extern int const TITLE;
 extern int const MAIN;
 extern int const GAMEOVER;
+extern int const CLEAR;
 extern int scene;
 
 extern int total_distance;
+//30日エッグ変更
+extern int length;     //距離
 extern double timer;
 
 /*----------FPS関連-----------------*/

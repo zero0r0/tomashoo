@@ -36,13 +36,15 @@ void ShotUpdate() {
 		if (tomato_effect[i].is_used) {
 			tomato_effect[i].y += player.speed;
 
-			if (tomato_effect[i].count > 10) {
+			if (tomato_effect[i].count > 15 && tomato_effect[i].state == 0) {
 				tomato_effect[i].state++;
 				tomato_effect[i].count = 0;
 			}
 			else
 				tomato_effect[i].count++;
-			if (tomato_effect[i].state >= 2) {
+
+			//エフェクト画面外判定
+			if (tomato_effect[i].y >= 500) {
 				tomato_effect[i].count = 0;
 				tomato_effect[i].x = -10;
 				tomato_effect[i].y = -10;

@@ -6,9 +6,10 @@
 #define WINDOW_YSIZE 480
 
 
-void TestMessage();		//関数のプロトタイプ宣言
 void LoadGraphicAll();
 void DeleteGraphicAll();
+void LoadSoundAll();
+void DeleteSoundAll();
 
 
 Player player;
@@ -21,6 +22,7 @@ int scene;
 int const TITLE = 0;
 int const MAIN = 1;
 int const GAMEOVER = 2;
+int const CLEAR = 3;
 
 bool is_clear = false;
 int weather_number;
@@ -39,9 +41,15 @@ int font_tomato_graphic;
 int shasen_graphic;
 int tomato_effect_graphic[2];
 int sand_effect_graphic[2];
+int gameover_graphic[4];
 //25日エッグ変更
 int font_timeup_graphic[4];
 int font_length_graphic[2];
+int gameclear_graphic;
+
+//サウンド系
+int stage_bgm[2];
+int gameover_bgm[2];
 
 
 /*----------FPS関連-----------------*/
@@ -113,6 +121,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 	}
 	
 	LoadGraphicAll();
+	LoadSoundAll();
 
 	scene = TITLE;
 	TitleInit();
@@ -134,33 +143,47 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 				MainGameDraw();
 				break;
 			case GAMEOVER:
-				if (key_z > 0) {
-					scene = TITLE;
-				}
+				GameoverUpdate();
+				GameoverDraw();
+				break;
+			case CLEAR:
+				GameClearUpdate();
+				GameClearDraw();
 				break;
 			default:
 				break;
 		}
 		Draw();
-		TestMessage();
 		ScreenFlip();
 		Wait();
 	}
-	DeleteGraphicAll();
+	//DeleteGraphicAll();
+	InitGraph();
+	InitSoundMem();
+	//DeleteSoundAll();
+
 	DxLib_End();
 	return 0;
 }
 
 void LoadGraphicAll() {
-	LoadDivGraph("Data/pc01.png",2,2,1,48,48, player.graphic);
+	//30日エッグ変更
+	LoadDivGraph("Data/pc01.png", 2, 2, 1, 48, 48, player.graphic[0]);
+	LoadDivGraph("Data/pc02.png", 2, 2, 1, 48, 48, player.graphic[1]);
 	LoadDivGraph("Data/en01.png", 2, 2, 1, 48, 48, enemy_graphic[0]);
 	LoadDivGraph("Data/en02.png", 2, 2, 1, 48, 48, enemy_graphic[1]);
 	LoadDivGraph("Data/en03.png", 2, 2, 1, 48, 48, enemy_graphic[2]);
 	LoadDivGraph("Data/en04.png", 2, 2, 1, 48, 48, enemy_graphic[3]);
 	LoadDivGraph("Data/en05c.png", 2, 2, 1, 48, 48, enemy_graphic[4]);
 	LoadDivGraph("Data/en05l.png", 2, 2, 1, 48, 48, enemy_graphic[5]);
-	LoadDivGraph("Data/en05r.png", 2, 2, 1, 48, 48, enemy_graphic[6]);
-	LoadDivGraph("Data/en06a.png", 2, 2, 1, 48, 48, enemy_graphic[7]);
+	LoadDivGraph("Data/en05f.png", 2, 2, 1, 48, 48, enemy_graphic[6]);
+	
+	for (int i = 0; i < 2; i++) {
+		enemy_graphic[7][i] = LoadGraph("Data/en06b.png");
+		enemy_graphic[8][i] = LoadGraph("Data/en06f.png");
+		enemy_graphic[9][i] = LoadGraph("Data/en06r.png");
+		enemy_graphic[10][i] = LoadGraph("Data/en06l.png");
+	}
 
 	player.life_graphic = LoadGraph("Data/life.bmp");
 	
@@ -193,20 +216,29 @@ void LoadGraphicAll() {
 	font_num_graphic[9] = LoadGraph("Data/font9.png");
 	font_tomato_graphic = LoadGraph("Data/font.tomato.png");
 	shasen_graphic = LoadGraph("Data/shasen.png");
-
-	//25日エッグ変更
-	font_length_graphic[0] = LoadGraph("Data/font.nokori.png");	//25日エッグ変更
-	shasen_graphic = LoadGraph("Data/shasen.png");
-	//
+	font_length_graphic[0] = LoadGraph("Data/font.nokori.png");
+	//30日エッグ変更
+	font_length_graphic[1] = LoadGraph("Data/font.km.png");
 	LoadDivGraph("Data/it01.png", 2, 2, 1, 48, 48, tomato_item_graphic);
-
 	LoadDivGraph("Data/ef02.png", 2, 2, 1, 48, 48, sand_effect_graphic);
 	LoadDivGraph("Data/ef01.png", 2, 2, 1, 48, 48, tomato_effect_graphic);
+
+	gameover_graphic[0] = LoadGraph("Data/gameover1.png");
+	gameover_graphic[1] = LoadGraph("Data/gameover2.png");
+	gameover_graphic[2] = LoadGraph("Data/gameover3.png");
+	gameover_graphic[3] = LoadGraph("Data/gameover4.png");
+	gameclear_graphic = LoadGraph("Data/gameclear.png");
 }
 
 void DeleteGraphicAll() {
-	DeleteGraph(player.graphic[0]);
-	DeleteGraph(player.graphic[1]);
+	//DeleteGraph(player.graphic[0]);
+	//DeleteGraph(player.graphic[1]);
+	// 30日エッグ変更
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 2; j++) {
+			DeleteGraph(player.graphic[i][j]);
+		}
+	}
 	DeleteGraph(player.life_graphic);
 	DeleteGraph(shot_graphic);
 	for(int i = 0; i < MAX_STAGE;i++)
@@ -238,12 +270,28 @@ void DeleteGraphicAll() {
 		DeleteGraph(sand_effect_graphic[i]);
 
 	}
+
+	//30日エッグ変更
+	for (int i = 0; i < 2; i++) {
+		DeleteGraph(font_length_graphic[i]);
+	}
 	DeleteGraph(speed_meter_graphic);
 	DeleteGraph(speed_needle_graphic);
 	DeleteGraph(font_tomato_graphic);
 	DeleteGraph(shasen_graphic);
 }
 
-void TestMessage() {
-	//DrawFormatString(100, 100, GetColor(255, 255, 255), "変数 scene の値は %d です", scene);
+void LoadSoundAll() {
+	stage_bgm[0] = LoadSoundMem("Data/stagebgm0.ogg");
+	stage_bgm[1] = LoadSoundMem("Data/stagebgm1.ogg");
+
+	gameover_bgm[0] = LoadSoundMem("Data/gameobera.ogg");
+	gameover_bgm[1] = LoadSoundMem("Data/gameobera2.ogg");
+}
+
+void DeleteSoundAll() {
+	for (int i = 0; i < 2; i++) {
+		DeleteSoundMem(stage_bgm[i]);
+		DeleteSoundMem(gameover_bgm[i]);
+	}
 }

@@ -5,46 +5,9 @@
 
 
 int total_distance = 0;
-double enemy_timer = 0;
+int enemy_timer = 0;
 Effect sand_effect[EFFECT_NUM];
-int en = 0;
-
-/*
-void EnemyLoad() {
-	FILE *fp;
-	char *fname = "Data/enemy.csv";
-	int e_type;
-	int s_x, s_y;
-	int d_x, d_y;
-	int time;
-
-	auto e = fopen_s(&fp, fname, "r");
-	if (e != 0) {
-		printf("ファイル開けない\n");
-		return;
-	}
-
-	int i = 0;
-	int dust;
-	//一行目はいらない
-	while ((dust = fgetc(fp)) != '\n');
-	
-	while (i < MAX_ENEMY && (fscanf_s(fp,"%d,%d,%d,%d,%d,%d",&e_type, &s_x,&s_y,&d_x,&d_y, &time)) != EOF)	{
-		enemy[i].x = s_x;
-		enemy[i].y = s_y;
-		enemy[i].move_x = d_x;
-		enemy[i].move_y = d_y;
-		enemy[i].wait_time = time;
-		enemy[i].type = e_type;
-		enemy[i].x_size = 48;
-		enemy[i].y_size = 48;
-		enemy[i].r = 4;
-		i++;
-	}
-
-	fclose(fp);
-}
-*/
+bool is_first_kill = true;
 
 //敵の初期化の関数
 void EnemyInit() {
@@ -72,6 +35,7 @@ void EnemyInit() {
 	}
 
 	enemy_timer = 0;
+	is_first_kill = true;
 	//EnemyLoad();
 }
 
@@ -79,24 +43,46 @@ void EnemyInit() {
 //出現時のエフェクト処理も含む
 void EnemyUpdate() {
 	bool is_spawn = false;
+	int interval = 60 * ((background[0].now_stage < 2) ? 1 : 2);
 
-	total_distance += (double)player.speed * (1.0 / mFps);
-	enemy_timer += (double)player.speed * (1.0 / mFps);
+	//total_distance += (double)player.speed * (1.0 / mFps);
+	enemy_timer += player.speed;
 	
+
 	//一定時間で敵を出現させる
-	//if (enemy_timer > 2.0)
-	//	is_spawn = true;
-	//else
-	//	is_spawn = false;
+	if (enemy_timer > interval && !(30 <= length && length <= 37 ) && !(65 <= length && length <= 70))
+		is_spawn = true;
+	else
+		is_spawn = false;
 	
+	if (length <= 6 && is_spawn && is_first_kill) {
+		is_spawn = false;
+		enemy[0].x = 700;
+		enemy[0].y = background[0].y + 1060;
+		enemy[0].move_x = -10;
+		enemy[0].move_y = 0;
+		enemy[0].type = 9;
+		enemy[0].is_dead = false;
+		enemy_timer = 0;
+
+		enemy[1].x = -300;
+		enemy[1].y = background[0].y + 930;
+		enemy[1].move_x = 10;
+		enemy[1].move_y = 0;
+		enemy[1].type = 10;
+		enemy[1].is_dead = false;
+		enemy_timer = 0;
+
+		is_first_kill = false;
+	}
 
 	for (int i = 0; i < MAX_ENEMY; i++) {
 		if (enemy[i].is_dead) {
-			//if (is_spawn) {
-			//	SpawnEnemy(i);
-			//	is_spawn = false;
-			//	enemy_timer = 0;
-			//}
+			if (is_spawn) {
+				SpawnEnemy(i,background[1].now_stage,0);
+				is_spawn = false;
+				enemy_timer = 0;
+			}
 		}
 		else{
 			enemy[i].y += player.speed;
@@ -146,7 +132,7 @@ void EnemyUpdate() {
 //敵出現時の関数
 void SpawnEnemy(int n, int stage, int enemy_num) {
 	int type = 0;
-	int x = 0, y = -480 / ENEMY_SPAWN_NUM;
+	int x = 0, y = 0;// -480 / ENEMY_SPAWN_NUM;
 	int m_x = 0, m_y = 0;
 	int rand_spawn = GetRand(2);
 
@@ -163,7 +149,7 @@ void SpawnEnemy(int n, int stage, int enemy_num) {
 			type = GetRand(2);
 			break;
 		case 2:
-			type = 4 + GetRand(2);
+			type = 4 + GetRand(4);
 			break;
 		//default:
 		//	return;
@@ -177,15 +163,15 @@ void SpawnEnemy(int n, int stage, int enemy_num) {
 		case 0:
 			if (rand_spawn == 0) {
 				x = GetRand(640);
-				//y = -GetRand(480);
+				y = -GetRand(480);
 			}
 			else if (rand_spawn == 1) {
 				x = -GetRand(50);
-				//y = GetRand(480);
+				y = GetRand(480);
 			}
 			else {
 				x = 640 + GetRand(50);
-				//y = GetRand(480);
+				y = GetRand(480);
 			}
 
 			if (x < 360)
@@ -197,42 +183,55 @@ void SpawnEnemy(int n, int stage, int enemy_num) {
 		//ハクビシン
 		case 1:
 			x = GetRand(640);
-			//y = -GetRand(480);
+			y = -GetRand(480);
 			break;
 		//イノシシ
 		case 2:
 			x = GetRand(640);
-			//y = -GetRand(480);
+			y = -GetRand(480);
 			m_y = GetRand(10);
 			SpawnEffect(x,5);
 			break;
 		case 3:
 			x = 100 + GetRand(220);
-			//y = 480;
+			y = 480;
 			m_x = 2 + GetRand(5);
 			m_y = -6;
 			break;
 		//歩行者１
 		case 4:
 			x = 100;
-			//y = -GetRand(480);
+			y = -40;
 			break;
 		case 5:
 			x = 100;
-			//y = -GetRand(480);
+			y = -40;
 			m_x = GetRand(2);
 			m_y = 0;
 			break;
 		case 6:
 			x = 520;
-			//y = -GetRand(480);
+			y = -40;
 			m_x = -GetRand(2);
 			m_y = 0;
+			break;
+		//とラック
+		case 7:
+			x = 120;
+			y = 480;
+			m_x = 0;
+			m_y = -5;
+			break;
+		case 8:
+			x = 350;
+			y = -50;
+			m_x = 0;
+			m_y = 5;
 			break;
 		default:
 			break;
 	}
-	y = y * enemy_num;
+	//y = y * enemy_num;
 
 	enemy[n].x = x;
 	enemy[n].y = y;

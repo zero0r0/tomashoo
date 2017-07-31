@@ -37,12 +37,6 @@ void BackgroundUpdate() {
 				//最終ステージだった場合
 				if(background[i].now_stage == MAX_STAGE - 1) {
 					background[i].y_size = 1920;
-					enemy[0].x = 1500;
-					enemy[0].y = -1055;
-					enemy[0].move_x = 10;
-					enemy[0].move_y = 0;
-					enemy[0].type = 7;
-					enemy[0].is_dead = false;
 					if (i == 1)
 						last_stage = true;
 				}else {
@@ -57,7 +51,7 @@ void BackgroundUpdate() {
 				background[i].loopNum++;
 
 				//敵を配置
-				int enemy_num_count = 0;
+				/*int enemy_num_count = 0;
 				for (int j = 0; j < MAX_ENEMY; j++) {
 					if (enemy[j].is_dead) {
 						SpawnEnemy(j, background[i].now_stage, enemy_num_count);
@@ -65,7 +59,7 @@ void BackgroundUpdate() {
 						if (ENEMY_SPAWN_NUM <= enemy_num_count)
 							break;
 					}
-				}
+				}*/
 			}
 			background[i].y -= 480 + background[i].y_size;
 		}
