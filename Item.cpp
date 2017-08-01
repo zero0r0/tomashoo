@@ -10,7 +10,7 @@ void ItemInit() {
 		item[i].y = -100;
 		item[i].x_size = 48;
 		item[i].y_size = 48;
-		item[i].r = 17;
+		item[i].r = 20;
 	}
 
 }

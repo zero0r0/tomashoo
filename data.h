@@ -1,7 +1,7 @@
 #pragma once
 
 #define MAX_TOMATO 255
-#define MAX_ITEM 5
+#define MAX_ITEM 8
 #define MAX_ENEMY 125
 #define ENEMY_SPAWN_NUM 5
 #define MAX_ENEMY_TYPE 11
@@ -15,11 +15,10 @@
 
 /*オブジェクト系*/
 typedef struct {
-	int graphic[2][2];			//プレイヤー画像
+	int graphic[2][2];		//プレイヤー画像
 	int x, y;				//xy座標
+	int width_speed;
 	int x_size, y_size;		//x.y大きさ
-	int life;				//ライ
-	int life_graphic;		//ライフの画像
 	int safetime;			//無敵時間
 	int shot_trigger;		//ショットのインターバル
 	int tomato;				//所持トマト数
@@ -92,6 +91,7 @@ void EnemyDraw();
 //void EnemyLoad();
 void SpawnEnemy(int,int, int);
 void SpawnEffect(int, int);
+int EnemyTypeSearch(int);
 
 void ShotInit();
 void ShotUpdate();
@@ -183,3 +183,4 @@ extern const int FPS;	//設定したFPS
 
 extern bool is_clear;
 extern bool last_stage;
+extern int now_wave;

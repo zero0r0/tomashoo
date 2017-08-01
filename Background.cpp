@@ -2,7 +2,7 @@
 #include "DxLib.h"
 #include <math.h>
 
-int now_stage = 0;
+int now_wave = 0;
 bool last_stage = false;
 
 void BackgroundInit() {
@@ -19,13 +19,12 @@ void BackgroundInit() {
 	background[1].loopNum = 0;
 	background[1].y_size = 960;
 
-	now_stage = 0;
+	now_wave = 0;
 	last_stage = false;
 }
 
 void BackgroundUpdate() {
 	for (int i = 0; i < 2; i++) {
-
 		//背景が下までスクロールしたら
 		if (background[i].y >= 480) {
 			//背景を変えるときの処理(背景が一定回数ループしたら)
@@ -34,9 +33,11 @@ void BackgroundUpdate() {
 				//ループ回数リセットして背景を更新
 				background[i].loopNum = 0;
 				background[i].now_stage++;
+				now_wave = (i == 1) ? background[i].now_stage : now_wave;
 				//最終ステージだった場合
 				if(background[i].now_stage == MAX_STAGE - 1) {
 					background[i].y_size = 1920;
+					now_wave = background[i].now_stage;
 					if (i == 1)
 						last_stage = true;
 				}else {

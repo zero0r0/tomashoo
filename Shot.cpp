@@ -11,7 +11,7 @@ void ShotInit() {
 		shot[i].y = -100;
 		shot[i].x_size = 48;
 		shot[i].y_size = 48;
-		shot[i].r = 15;
+		shot[i].r = 20;
 		shot[i].is_active = false;
 
 		tomato_effect[i].x = -10;

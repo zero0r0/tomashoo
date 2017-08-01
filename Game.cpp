@@ -27,7 +27,6 @@ int const CLEAR = 3;
 bool is_clear = false;
 int weather_number;
 
-
 //グラフィック系
 int shot_graphic;
 int tomato_item_graphic[2];
@@ -185,8 +184,6 @@ void LoadGraphicAll() {
 		enemy_graphic[10][i] = LoadGraph("Data/en06l.png");
 	}
 
-	player.life_graphic = LoadGraph("Data/life.bmp");
-	
 	//25日エッグ変更
 	font_timeup_graphic[0] = LoadGraph("Data/font.timeup.png");
 	font_timeup_graphic[1] = LoadGraph("Data/font.made.png");
@@ -201,8 +198,8 @@ void LoadGraphicAll() {
 	background_graphic[3] = LoadGraph("Data/families.png");
 	speed_meter_graphic = LoadGraph("Data/speed_meter.png");
 	speed_needle_graphic = LoadGraph("Data/speed_needle.png");
-	weather_graphic[0] = LoadGraph("Data/weather_cloudy.png");
-	weather_graphic[1] = LoadGraph("Data/weather_rainy.png");
+	weather_graphic[0] = LoadGraph("Data/weather_rainy.png");
+	weather_graphic[1] = LoadGraph("Data/weather_cloudy.png");
 	weather_graphic[2] = LoadGraph("Data/weather_sunny.png");
 	font_num_graphic[0] = LoadGraph("Data/font0.png");
 	font_num_graphic[1] = LoadGraph("Data/font1.png");
@@ -239,7 +236,6 @@ void DeleteGraphicAll() {
 			DeleteGraph(player.graphic[i][j]);
 		}
 	}
-	DeleteGraph(player.life_graphic);
 	DeleteGraph(shot_graphic);
 	for(int i = 0; i < MAX_STAGE;i++)
 		DeleteGraph(background_graphic[i]);

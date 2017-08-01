@@ -14,7 +14,6 @@ void PlayerInit() {
 	player.y = 320;
 	player.x_size = 48;
 	player.y_size = 48;
-	player.life = 3;
 	player.safetime = 10;
 	player.shot_trigger = 10;
 	player.tomato = 50;
@@ -25,6 +24,7 @@ void PlayerInit() {
 	//25日エッグ変更
 	player.time = TIME_LIMIT;
 	player.fleam_count = 0;
+	player.width_speed = 4;
 }
 
 //プレイヤー更新関数
@@ -111,11 +111,18 @@ void PlayerDraw() {
 
 ///
 void PlayerMovement() {
-	//キーが押されていたらプレイヤーを移動させる
-	//if (key_up > 0)		player.y -= 4;
-	//if (key_down > 0)	player.y += 4;
-	if (key_left > 0)	player.x -= 4;
-	if (key_right > 0)	player.x += 4;
+	if (player.tomato < 30) {
+		player.width_speed = 6;
+	}
+	else if (30 <= player.tomato && player.tomato <= 60) {
+		player.width_speed = 4;
+	}
+	else {
+		player.width_speed = 2;
+	}
+
+	if (key_left > 0)	player.x -= player.width_speed;
+	if (key_right > 0)	player.x += player.width_speed;
 	//プレイヤーが画面外に出ないようにする
 	if (player.x < 0)			player.x = 0;
 	if (player.x  > 640)	player.x = 640;
@@ -144,7 +151,7 @@ void PlayerShot() {
 void PlayerCollision() {
 	for (int i = 0; i < MAX_TOMATO; i++) {
 		if ((player.x + player.x_size / 2 - (item[i].x + item[i].x_size / 2))* (player.x + player.x_size / 2 - (item[i].x + item[i].x_size / 2)) + (player.y + player.y_size / 2 - (item[i].y + item[i].y_size / 2))* (player.y + player.y_size / 2 - (item[i].y + item[i].y_size / 2)) <= (player.r + item[i].r)*(player.r + item[i].r)) {
-			player.tomato += 5;
+			player.tomato += 4 * (weather_number+1);
 			item[i].y = -100;
 			item[i].x = -100;
 		}
@@ -155,12 +162,12 @@ void PlayerCollision() {
 	else {
 		for (int i = 0; i < MAX_ENEMY; i++) {
 			if ((player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2))*(player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2)) + (player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2))*(player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2)) <= (player.r + enemy[i].r)*(player.r + enemy[i].r)) { //22日エッグ変更
-				//player.life -= 1;
 				Damage(enemy[i].type);
 				player.safetime = 60;
-				if (enemy[i].type == 2 || 4 <= enemy[i].type) {
+				/*if (enemy[i].type == 2 || 4 <= enemy[i].type) {
 					GameoverInit(3);
 				}
+				*/
 			}
 		}
 	}
@@ -175,14 +182,15 @@ void Damage(int type) {
 			break;
 		case 1:
 			damage = 1 + GetRand(4);
-			player.speed--;
+			player.speed = (0 < player.speed-2) ? player.speed-2 : 1;
 			break;
 		default:
-			scene = GAMEOVER;
+			GameoverInit(3);
 			return;
 			break;
 	}
-	player.tomato -= damage;
+	damage = player.tomato - damage;
+	player.tomato = (0 < damage) ? damage : 0;
 }
 
 void PlayerSpeedUp() {
