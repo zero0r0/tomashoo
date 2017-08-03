@@ -113,6 +113,7 @@ void PlayerDraw() {
 	DrawGraph(85, 20, font_num_graphic[(length / 100) % 10], true);
 	DrawGraph(120, 20, font_num_graphic[(length / 10) % 10], true);
 	DrawGraph(155, 20, font_num_graphic[length % 10], true);
+	//DrawFormatString(100, 100, GetColor(255,255,255), "total:%d", total_distance);
 	DrawGraph(200, 50, font_length_graphic[1], true);
 }
 
@@ -169,17 +170,11 @@ void PlayerCollision() {
 	else {
 		for (int i = 0; i < MAX_ENEMY; i++) {
 			if (6 < enemy[i].type && enemy[i].type <= 10) {
-				int px1 = player.x + 15;
-				int py1 = player.y + 6;
-				int px2 = player.x + player.x_size - 15;
-				int py2 = player.y + player.y_size;
-				int ex1 = enemy[i].x;
-				int ey1 = enemy[i].y;
-				int ex2 = enemy[i].x + enemy[i].x_size;
-				int ey2 = enemy[i].x + enemy[i].y_size;
-				if (ex1 <= px2 && ex2 >= px1 && ey1 <= py2 && ey2 >= py1){
-					Damage(enemy[i].type);
-					player.safetime = 60;
+				if(enemy[i].x <= player.x + player.x_size && enemy[i].x + enemy[i].x_size >= player.x){
+					if (enemy[i].y <= player.y + player.y_size && enemy[i].y + enemy[i].y_size >= player.y) {
+						Damage(enemy[i].type);
+						//player.safetime = 60;
+					}
 				}
 			}
 			else {

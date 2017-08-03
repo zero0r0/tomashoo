@@ -24,7 +24,7 @@ void MainGameUpdate() {
 	//27日エッグ変更
 	if (!is_clear) {
 		total_distance += player.speed;
-		length = (int)((18513 - total_distance) * (1.0 / 185));
+		length = (int)((24277 - total_distance) * (1.0 / 242));
 		if (length < 0)
 			length = 0;
 	}else if(player.tomato < 50){

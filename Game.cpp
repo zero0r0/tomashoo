@@ -175,7 +175,7 @@ void LoadGraphicAll() {
 	LoadDivGraph("Data/en04.png", 2, 2, 1, 48, 48, enemy_graphic[3]);
 	LoadDivGraph("Data/en05c.png", 2, 2, 1, 48, 48, enemy_graphic[4]);
 	LoadDivGraph("Data/en05l.png", 2, 2, 1, 48, 48, enemy_graphic[5]);
-	LoadDivGraph("Data/en05f.png", 2, 2, 1, 48, 48, enemy_graphic[6]);
+	LoadDivGraph("Data/en05r.png", 2, 2, 1, 48, 48, enemy_graphic[6]);
 	
 	for (int i = 0; i < 2; i++) {
 		enemy_graphic[7][i] = LoadGraph("Data/en06b.png");
