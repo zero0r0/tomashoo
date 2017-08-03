@@ -3,6 +3,7 @@
 #include "DxLib.h"
 
 double timer = 0;
+int total_distance = 0;
 
 //ƒƒCƒ“ƒQ[ƒ€n‚Ü‚é‚Æ‚«‚É‚·‚é‰Šú‰»
 void MainGameInit() {
@@ -24,6 +25,8 @@ void MainGameUpdate() {
 	if (!is_clear) {
 		total_distance += player.speed;
 		length = (int)((18513 - total_distance) * (1.0 / 185));
+		if (length < 0)
+			length = 0;
 	}else if(player.tomato < 50){
 		GameoverInit(1);
 		return;

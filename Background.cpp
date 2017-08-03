@@ -62,7 +62,7 @@ void BackgroundUpdate() {
 					}
 				}*/
 			}
-			background[i].y -= 480 + background[i].y_size;
+			background[i].y -= (background[i].y_size + background[(i+1)%2].y_size);
 		}
 	}
 	for (int i = 0; i < 2; i++) {

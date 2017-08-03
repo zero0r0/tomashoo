@@ -4,7 +4,6 @@
 #include <math.h>
 
 
-int total_distance = 0;
 int enemy_timer = 0;
 Effect sand_effect[EFFECT_NUM];
 bool is_first_kill = true;
@@ -239,16 +238,16 @@ void SpawnEnemy(int n, int stage, int enemy_num) {
 		//‚Æƒ‰ƒbƒN
 		case 7:		
 			x = 140;
-			y = 480;
+			y = -144;
 			m_x = 0;
-			m_y = -8;
+			m_y = 0;
 			x_s = 96;
 			y_s = 144;
 			r = 45;
 			break;
 		case 8:
 			x = 350;
-			y = -50;
+			y = -144;
 			m_x = 0;
 			m_y = 5;
 			x_s = 96;
@@ -260,8 +259,8 @@ void SpawnEnemy(int n, int stage, int enemy_num) {
 			y = background[0].y + 1060;
 			m_x = -10;
 			m_y = 0;
-			x_s = 96;
-			y_s = 144;
+			x_s = 144;
+			y_s = 96;
 			r = 45;
 			break;
 		case 10:
@@ -269,8 +268,8 @@ void SpawnEnemy(int n, int stage, int enemy_num) {
 			y = background[0].y + 930;
 			m_x = 10;
 			m_y = 0;
-			x_s = 96;
-			y_s = 144;
+			x_s = 144;
+			y_s = 96;
 			r = 45;
 			break;
 		default:

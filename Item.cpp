@@ -19,13 +19,13 @@ void ItemInit() {
 void SpawnItem(int n) {
 	if (n == 0) {
 		for (int i = 0; i < MAX_ITEM / 2; i++) {
-			item[i].x = GetRand(640);
+			item[i].x = 80 + GetRand(440);
 			item[i].y = GetRand(-960);
 		}
 	}
 	else {
 		for (int i = MAX_ITEM/2; i < MAX_ITEM; i++) {
-			item[i].x = GetRand(640);
+			item[i].x = 80 + GetRand(440);
 			item[i].y = GetRand(-960);
 		}
 	}

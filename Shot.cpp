@@ -57,7 +57,8 @@ void ShotUpdate() {
 	for (int j = 0; j < MAX_TOMATO; j++) {
 		for (int i = 0; i < MAX_ENEMY; i++) {
 			if (shot[j].is_active && !enemy[i].is_dead && ((shot[j].x + shot[j].x_size / 2) - (enemy[i].x + enemy[i].x_size / 2)) * ((shot[j].x + shot[j].x_size / 2) - (enemy[i].x + enemy[i].x_size / 2)) + (shot[j].y + shot[j].y_size / 2 - (enemy[i].y + enemy[i].y_size / 2)) * ((shot[j].y + shot[j].y_size / 2) - (enemy[i].y + enemy[i].y_size / 2)) <= (shot[j].r + enemy[i].r) * (shot[j].r + enemy[i].r)) { //‚Q‚Q“úƒGƒbƒO•ÏX
-				enemy[i].is_dead = true;
+				if(enemy[i].type < 7)
+					enemy[i].is_dead = true;
 				//shot[j].life = 0;
 				shot[j].is_active = false;
 				for (int k = 0; k < MAX_TOMATO; k++) {

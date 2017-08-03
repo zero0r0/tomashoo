@@ -41,9 +41,13 @@ void PlayerUpdate() {
 	}
 
 	//25日エッグ変更
-	if (player.fleam_count % 60 == 0 && !is_clear
+	if (player.time > 0 && player.fleam_count % 60 == 0 && !is_clear
 		) {
 		player.time--;
+	}
+	if (player.time <= 0) {
+		GameoverInit(2);
+		return;
 	}
 	player.fleam_count++;
 
@@ -96,15 +100,18 @@ void PlayerDraw() {
 	DrawGraph(450, 355, font_timeup_graphic[0], true);
 	DrawGraph(550, 355, font_timeup_graphic[1], true);
 	DrawGraph(450, 420, font_timeup_graphic[2], true);
+	
 	DrawGraph(510, 400, font_num_graphic[player.time % 10], true);
 	DrawGraph(475, 400, font_num_graphic[(player.time / 10) % 10], true);
 	DrawGraph(560, 420, font_timeup_graphic[3], true);
 	DrawGraph(15, 10, font_length_graphic[0], true);
+	
 	//DrawGraph(85, 20, font_num_graphic[(320 - total_distance) / 10 % 10], true);
 	//DrawGraph(120, 20, font_num_graphic[(320 - total_distance) % 10], true);
 	//DrawCircle(player.x + 24, player.y + 24, player.r, GetColor(255, 255, 255), true);
-	DrawGraph(85, 20, font_num_graphic[length / 100 % 10], true);
-	DrawGraph(120, 20, font_num_graphic[length / 10 % 10], true);
+	
+	DrawGraph(85, 20, font_num_graphic[(length / 100) % 10], true);
+	DrawGraph(120, 20, font_num_graphic[(length / 10) % 10], true);
 	DrawGraph(155, 20, font_num_graphic[length % 10], true);
 	DrawGraph(200, 50, font_length_graphic[1], true);
 }
@@ -124,10 +131,10 @@ void PlayerMovement() {
 	if (key_left > 0)	player.x -= player.width_speed;
 	if (key_right > 0)	player.x += player.width_speed;
 	//プレイヤーが画面外に出ないようにする
-	if (player.x < 0)			player.x = 0;
-	if (player.x  > 640)	player.x = 640;
-	if (player.y < 0)			player.y = 0;
-	if (player.y  > 480)	player.y = 480;
+	if (player.x < 80)			player.x = 80;
+	if (player.x  > 520)	player.x = 520;
+	//if (player.y < 0)			player.y = 0;
+	//if (player.y  > 480)	player.y = 480;
 }
 
 void PlayerShot() {
@@ -161,13 +168,26 @@ void PlayerCollision() {
 		player.safetime--;
 	else {
 		for (int i = 0; i < MAX_ENEMY; i++) {
-			if ((player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2))*(player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2)) + (player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2))*(player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2)) <= (player.r + enemy[i].r)*(player.r + enemy[i].r)) { //22日エッグ変更
-				Damage(enemy[i].type);
-				player.safetime = 60;
-				/*if (enemy[i].type == 2 || 4 <= enemy[i].type) {
-					GameoverInit(3);
+			if (6 < enemy[i].type && enemy[i].type <= 10) {
+				int px1 = player.x + 15;
+				int py1 = player.y + 6;
+				int px2 = player.x + player.x_size - 15;
+				int py2 = player.y + player.y_size;
+				int ex1 = enemy[i].x;
+				int ey1 = enemy[i].y;
+				int ex2 = enemy[i].x + enemy[i].x_size;
+				int ey2 = enemy[i].x + enemy[i].y_size;
+				if (ex1 <= px2 && ex2 >= px1 && ey1 <= py2 && ey2 >= py1){
+					Damage(enemy[i].type);
+					player.safetime = 60;
 				}
-				*/
+			}
+			else {
+				if ((player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2))*(player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2)) + (player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2))*(player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2)) <= (player.r + enemy[i].r)*(player.r + enemy[i].r)) { //22日エッグ変更
+					Damage(enemy[i].type);
+					player.safetime = 60;
+					
+				}
 			}
 		}
 	}
