@@ -74,7 +74,6 @@ typedef struct{
 	bool is_used;
 }Effect;
 
-
 void PlayerInit();
 void PlayerUpdate();
 void PlayerDraw();
@@ -108,6 +107,7 @@ void BackgroundDraw();
 void TitleInit();
 void TitleUpdata();
 void TitleDraw();
+void TitleExit();
 
 void MainGameInit();
 void MainGameUpdate();
@@ -149,13 +149,26 @@ extern int sand_effect_graphic[2];
 extern int font_timeup_graphic[4];
 extern int weather_number;
 extern int font_length_graphic[2];
+
 extern int gameover_graphic[4];
 extern int gameclear_graphic;
+
+extern int titlelogo_graphic[3];
+extern int title_botton_graphic[3];
+extern int title_tomato_graphic[2];
+extern int title_conbea_graphic;
+extern int title_pushed_tomato_graphic;
 
 //サウンド系
 extern int stage_bgm[2];
 extern int gameover_bgm[2];
+extern int title_bgm;
 
+extern int crash_se;
+extern int warning_se;
+extern int get_se;
+extern int tubure_se;
+extern int nageru_se;
 
 /*「scene」
 ゲームには、タイトル画面、メイン画面（ゲーム画面）、ゲームオーバー画面など、さまざまな画面がある。
@@ -167,6 +180,7 @@ extern int const MAIN;
 extern int const GAMEOVER;
 extern int const CLEAR;
 extern int scene;
+extern bool is_exit;
 
 extern int total_distance;
 //30日エッグ変更

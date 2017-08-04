@@ -44,6 +44,8 @@ void PlayerUpdate() {
 	if (player.time > 0 && player.fleam_count % 60 == 0 && !is_clear
 		) {
 		player.time--;
+		if(player.time == 10)
+			PlaySoundMem(warning_se, DX_PLAYTYPE_BACK, true);
 	}
 	if (player.time <= 0) {
 		GameoverInit(2);
@@ -139,7 +141,7 @@ void PlayerMovement() {
 }
 
 void PlayerShot() {
-
+	PlaySoundMem(nageru_se, DX_PLAYTYPE_BACK, true);
 	//使用されていない弾丸を探し、見つけたら情報をセットして抜け出す
 	for (int i = 0; i < player.tomato; i++) {
 		if (!shot[i].is_active) {
@@ -162,6 +164,7 @@ void PlayerCollision() {
 			player.tomato += 4 * (weather_number+1);
 			item[i].y = -100;
 			item[i].x = -100;
+			PlaySoundMem(get_se, DX_PLAYTYPE_BACK, true);
 		}
 	}
 	
@@ -170,8 +173,8 @@ void PlayerCollision() {
 	else {
 		for (int i = 0; i < MAX_ENEMY; i++) {
 			if (6 < enemy[i].type && enemy[i].type <= 10) {
-				if(enemy[i].x <= player.x + player.x_size && enemy[i].x + enemy[i].x_size >= player.x){
-					if (enemy[i].y <= player.y + player.y_size && enemy[i].y + enemy[i].y_size >= player.y) {
+				if(enemy[i].x <=10 + player.x + player.x_size-20 && enemy[i].x + enemy[i].x_size >= 10 + player.x){
+					if (enemy[i].y <=5 + player.y + player.y_size-5 && enemy[i].y + enemy[i].y_size >= 5 + player.y) {
 						Damage(enemy[i].type);
 						//player.safetime = 60;
 					}
@@ -181,7 +184,6 @@ void PlayerCollision() {
 				if ((player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2))*(player.x + player.x_size / 2 - (enemy[i].x + enemy[i].x_size / 2)) + (player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2))*(player.y + player.y_size / 2 - (enemy[i].y + enemy[i].y_size / 2)) <= (player.r + enemy[i].r)*(player.r + enemy[i].r)) { //22日エッグ変更
 					Damage(enemy[i].type);
 					player.safetime = 60;
-					
 				}
 			}
 		}
@@ -199,7 +201,12 @@ void Damage(int type) {
 			damage = 1 + GetRand(4);
 			player.speed = (0 < player.speed-2) ? player.speed-2 : 1;
 			break;
+		case 3:
+			damage = player.tomato / 2;
+			player.speed = 0;
+			break;
 		default:
+			PlaySoundMem(crash_se, DX_PLAYTYPE_BACK, true);
 			GameoverInit(3);
 			return;
 			break;

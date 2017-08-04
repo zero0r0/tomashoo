@@ -60,6 +60,7 @@ void ShotUpdate() {
 				if(enemy[i].type < 7)
 					enemy[i].is_dead = true;
 				//shot[j].life = 0;
+				PlaySoundMem(tubure_se, DX_PLAYTYPE_BACK, true);
 				shot[j].is_active = false;
 				for (int k = 0; k < MAX_TOMATO; k++) {
 					if (!tomato_effect[k].is_used) {

@@ -25,6 +25,7 @@ int const GAMEOVER = 2;
 int const CLEAR = 3;
 
 bool is_clear = false;
+bool is_exit = false;
 int weather_number;
 
 //グラフィック系
@@ -46,10 +47,23 @@ int font_timeup_graphic[4];
 int font_length_graphic[2];
 int gameclear_graphic;
 
+//タイトルで使うグラフィック系
+int titlelogo_graphic[3];
+int title_botton_graphic[3];
+int title_tomato_graphic[2];
+int title_conbea_graphic;
+int title_pushed_tomato_graphic;
+
 //サウンド系
 int stage_bgm[2];
 int gameover_bgm[2];
+int title_bgm;
 
+int crash_se;
+int warning_se;
+int get_se;
+int tubure_se;
+int nageru_se;
 
 /*----------FPS関連-----------------*/
 
@@ -126,7 +140,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 	TitleInit();
 
 	//メインループ
-	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0) {
+	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0 && !is_exit) {
 		Update();
 		ClearDrawScreen();
 		KeyUpdate();
@@ -188,7 +202,7 @@ void LoadGraphicAll() {
 	font_timeup_graphic[0] = LoadGraph("Data/font.timeup.png");
 	font_timeup_graphic[1] = LoadGraph("Data/font.made.png");
 	font_timeup_graphic[2] = LoadGraph("Data/font.ato.png");
-	font_timeup_graphic[3] = LoadGraph("Data/font.byou.png");
+	font_timeup_graphic[3] = LoadGraph("Data/font_hun.png");
 	//
 	
 	shot_graphic = LoadGraph("Data/bl01.png");
@@ -225,6 +239,20 @@ void LoadGraphicAll() {
 	gameover_graphic[2] = LoadGraph("Data/gameover3.png");
 	gameover_graphic[3] = LoadGraph("Data/gameover4.png");
 	gameclear_graphic = LoadGraph("Data/gameclear.png");
+
+	titlelogo_graphic[0] = LoadGraph("Data/font_to.png");
+	titlelogo_graphic[1] = LoadGraph("Data/font_ma.png");
+	titlelogo_graphic[2] = LoadGraph("Data/font_shu.png");
+	
+	title_botton_graphic[0] = LoadGraph("Data/botan_start.png");
+	title_botton_graphic[1] = LoadGraph("Data/botan_record.png");
+	title_botton_graphic[2] = LoadGraph("Data/botan_exit.png");
+
+	title_tomato_graphic[0] = LoadGraph("Data/tomato.png");
+	title_tomato_graphic[1] = LoadGraph("Data/tubureta_tomato.png");
+
+	title_pushed_tomato_graphic = LoadGraph("Data/pushed_tomato.png");
+	title_conbea_graphic = LoadGraph("Data/conveyor.png");
 }
 
 void DeleteGraphicAll() {
@@ -280,9 +308,16 @@ void DeleteGraphicAll() {
 void LoadSoundAll() {
 	stage_bgm[0] = LoadSoundMem("Data/stagebgm0.ogg");
 	stage_bgm[1] = LoadSoundMem("Data/stagebgm1.ogg");
-
 	gameover_bgm[0] = LoadSoundMem("Data/gameobera.ogg");
 	gameover_bgm[1] = LoadSoundMem("Data/gameobera2.ogg");
+	title_bgm = LoadSoundMem("Data/title.ogg");
+
+	warning_se = LoadSoundMem("Data/warning_se.ogg");
+	crash_se = LoadSoundMem("Data/crash_se.ogg");
+	get_se = LoadSoundMem("Data/get_se.ogg");
+
+	tubure_se = LoadSoundMem("Data/tubure.ogg");
+	nageru_se = LoadSoundMem("Data/nageru.ogg");
 }
 
 void DeleteSoundAll() {

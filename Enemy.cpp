@@ -5,6 +5,7 @@
 
 
 int enemy_timer = 0;
+int sin_count = 0;
 Effect sand_effect[EFFECT_NUM];
 bool is_first_kill = true;
 
@@ -33,6 +34,7 @@ void EnemyInit() {
 		sand_effect[i].state = 0;
 	}
 
+	sin_count = 0;
 	enemy_timer = 0;
 	is_first_kill = true;
 	//EnemyLoad();
@@ -95,8 +97,19 @@ void EnemyUpdate() {
 				if (500 <= enemy[i].x)
 					enemy[i].is_dead = true;
 			}
+			if (enemy[i].type == 3) {
+				enemy[i].x = 300 + sin(PI * 2 / 240 * sin_count) * enemy[i].move_x;
+				sin_count++;
+				if (0 > enemy[i].y) {
+					enemy[i].is_dead = true;
+					enemy[i].x = -100;
+					enemy[i].y = -100;
+				}
+			}
+			else
+				enemy[i].x += enemy[i].move_x;
+
 			enemy[i].y += player.speed;
-			enemy[i].x += enemy[i].move_x;
 			enemy[i].y += enemy[i].move_y;
 			//	enemy[i].x += sin(PI * 2 / 60 * timer) * enemy[i].move_x;
 			if (enemy[i].y > 500) {
@@ -158,8 +171,8 @@ void SpawnEnemy(int n, int stage, int enemy_num) {
 			break;
 		case 2:
 			if (background[0].now_stage == background[1].now_stage) {
-				type = 4 + GetRand(4);
-				if (type == 7 || type == 8) {
+				type = 3 + GetRand(4);
+				if (type == 3 || type == 7 || type == 8) {
 					type = (0 < EnemyTypeSearch(type) ? 0 : type);
 				}
 			}
@@ -213,10 +226,10 @@ void SpawnEnemy(int n, int stage, int enemy_num) {
 			SpawnEffect(x,5);
 			break;
 		case 3:
-			x = 100 + GetRand(220);
+			x = 300;
 			y = 480;
-			m_x = 2 + GetRand(5);
-			m_y = -6;
+			m_x = 25;
+			m_y = -player.speed-1;
 			break;
 		//•àsŽÒ‚P
 		case 4:
