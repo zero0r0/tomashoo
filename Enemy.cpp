@@ -97,8 +97,9 @@ void EnemyUpdate() {
 				if (500 <= enemy[i].x)
 					enemy[i].is_dead = true;
 			}
+			//–\‘–‘°‚Ìˆ—
 			if (enemy[i].type == 3) {
-				if (enemy[i].y_size > enemy[i].y) {
+				if (-enemy[i].y_size > enemy[i].y) {
 					enemy[i].is_dead = true;
 					enemy[i].x = -100;
 					enemy[i].y = -100;
@@ -177,7 +178,7 @@ void SpawnEnemy(int n, int stage, int enemy_num) {
 			break;
 		case 2:
 			if (background[0].now_stage == background[1].now_stage) {
-				type = 3 + GetRand(4);
+				type = 3 + GetRand(5);
 				if (type == 3 || type == 7 || type == 8) {
 					type = (0 < EnemyTypeSearch(type) ? 0 : type);
 				}
@@ -245,13 +246,13 @@ void SpawnEnemy(int n, int stage, int enemy_num) {
 		case 5:
 			x = 100;
 			y = -40;
-			m_x = GetRand(2);
+			m_x = 1 + GetRand(1);
 			m_y = 0;
 			break;
 		case 6:
 			x = 520;
 			y = -40;
-			m_x = -GetRand(2);
+			m_x = -1-GetRand(1);
 			m_y = 0;
 			break;
 		//‚Æƒ‰ƒbƒN

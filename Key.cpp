@@ -2,6 +2,7 @@
 #include "Key.h"
 
 int key_z = 0, key_up = 0, key_down = 0, key_left = 0, key_right = 0;
+int key_a = 0, key_s = 0, key_w, key_d;
 
 void KeyUpdate() {
 	//キーの入力状況をチェックする
@@ -16,4 +17,12 @@ void KeyUpdate() {
 	else key_left = 0;
 	if (CheckHitKey(KEY_INPUT_RIGHT) == 1) key_right++;
 	else key_right = 0;
+	if (CheckHitKey(KEY_INPUT_A) == 1) key_a++;
+	else key_a = 0;
+	if (CheckHitKey(KEY_INPUT_S) == 1) key_s++;
+	else key_s = 0;
+	if (CheckHitKey(KEY_INPUT_W) == 1) key_w++;
+	else key_w = 0;
+	if (CheckHitKey(KEY_INPUT_D) == 1) key_d++;
+	else key_d = 0;
 }

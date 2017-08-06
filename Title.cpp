@@ -127,11 +127,11 @@ void TitleUpdata() {
 			if (window.page_flick_state%3 == 0) {
 				if (key_up == 1) {
 					window.page_flick_state++;
-					window.page++;
+					window.page = (window.page - 1 >= 0) ? window.page - 1 : 2;
 				}
 				else if (key_down == 1) {
 					window.page_flick_state++;
-					window.page = (window.page - 1 >= 0) ? window.page - 1 : 2;
+					window.page++;
 				}
 			}
 			else if (window.page_flick_state % 3 == 1) {
@@ -196,6 +196,8 @@ void TitleExit() {
 			scene = MAIN;
 			break;
 		case 1:
+			RecordInit();
+			scene = RECORD;
 			break;
 		case 2:
 			is_exit = true;
@@ -230,29 +232,29 @@ void TitleDraw() {
 		switch (window.page%3)
 		{
 			case 0:
-				DrawStringToHandle(window.x + 42,145,"操作方法", GetColor(255, 255, 255),FontHandle[0]);
-				DrawStringToHandle(window.x + 5, 180, "←・→… 移動", GetColor(255, 255, 255), FontHandle[0]);
-				DrawStringToHandle(window.x + 5, 200, "　↑　… 加速", GetColor(255, 255, 255), FontHandle[0]);
-				DrawStringToHandle(window.x + 5, 220, "　↓　… 減速", GetColor(255, 255, 255), FontHandle[0]);
-				DrawStringToHandle(window.x + 5, 240, "　ｚ　… トマシュ-!", GetColor(255, 255, 255), FontHandle[0]);
-				DrawStringToHandle(window.x + 5, 260, "(Esc　… 終了)", GetColor(255, 255, 255), FontHandle[0]);
+				DrawStringToHandle(window.x + 42,145,"操作方法", GetColor(255, 255, 255),font_handle[0]);
+				DrawStringToHandle(window.x + 5, 180, "←・→… 移動", GetColor(255, 255, 255), font_handle[0]);
+				DrawStringToHandle(window.x + 5, 200, "　↑　… 加速", GetColor(255, 255, 255), font_handle[0]);
+				DrawStringToHandle(window.x + 5, 220, "　↓　… 減速", GetColor(255, 255, 255), font_handle[0]);
+				DrawStringToHandle(window.x + 5, 240, "　ｚ　… トマシュ-!", GetColor(255, 255, 255), font_handle[0]);
+				DrawStringToHandle(window.x + 5, 260, "(Esc　… 終了)", GetColor(255, 255, 255), font_handle[0]);
 				break;
 			case 1:
-				DrawStringToHandle(window.x + 35, 145, "ゲームについて", GetColor(255, 255, 255), FontHandle[0]);
-				DrawStringToHandle(window.x + 5, 180,  "トマトを狙う敵にぶつかると", GetColor(255, 255, 255), FontHandle[1]);
-				DrawStringToHandle(window.x + 5, 200,  "トマトの残数が減少します。", GetColor(255, 255, 255), FontHandle[1]);
-				DrawStringToHandle(window.x + 5, 220,  "畑に実ってるトマトを拾って", GetColor(255, 255, 255), FontHandle[1]);
-				DrawStringToHandle(window.x + 5, 240,  "たくさんトマトを運びましょう", GetColor(255, 255, 255), FontHandle[1]);
-				DrawStringToHandle(window.x + 5, 260,  "中にはぶつかると減速したり、", GetColor(255, 255, 255), FontHandle[1]);
-				DrawStringToHandle(window.x + 5, 280,  "トマトを全て持ってく敵も…?", GetColor(255, 255, 255), FontHandle[1]);
+				DrawStringToHandle(window.x + 25, 145, "ゲームについて", GetColor(255, 255, 255), font_handle[0]);
+				DrawStringToHandle(window.x + 5, 180,  "トマトを狙う敵にぶつかると", GetColor(255, 255, 255), font_handle[1]);
+				DrawStringToHandle(window.x + 5, 200,  "トマトの残数が減少します。", GetColor(255, 255, 255), font_handle[1]);
+				DrawStringToHandle(window.x + 5, 220,  "畑に実ってるトマトを拾って", GetColor(255, 255, 255), font_handle[1]);
+				DrawStringToHandle(window.x + 5, 240,  "たくさんトマトを運びましょう", GetColor(255, 255, 255), font_handle[1]);
+				DrawStringToHandle(window.x + 5, 260,  "中にはぶつかると減速したり、", GetColor(255, 255, 255), font_handle[1]);
+				DrawStringToHandle(window.x + 5, 280,  "トマトを全て持ってく敵も…?", GetColor(255, 255, 255), font_handle[1]);
 				break;
 			case 2:
-				DrawStringToHandle(window.x + 35, 145, "クリアへの道", GetColor(255, 255, 255), FontHandle[0]);
-				DrawStringToHandle(window.x + 5, 180, "制限時間までに指定数の", GetColor(255, 255, 255), FontHandle[2]);
-				DrawStringToHandle(window.x + 5, 200, "トマトをファミレスまで", GetColor(255, 255, 255), FontHandle[2]);
-				DrawStringToHandle(window.x + 5, 220, "届けられればクリア！！", GetColor(255, 255, 255), FontHandle[2]);
-				DrawStringToHandle(window.x + 5, 240, "邪魔する奴には・・・", GetColor(255, 255, 255), FontHandle[2]);
-				DrawStringToHandle(window.x + 35, 280, "トマシュー！", GetColor(255, 255, 255), FontHandle[0]);
+				DrawStringToHandle(window.x + 35, 145, "クリアへの道", GetColor(255, 255, 255), font_handle[0]);
+				DrawStringToHandle(window.x + 5, 180, "制限時間までに指定数の", GetColor(255, 255, 255), font_handle[2]);
+				DrawStringToHandle(window.x + 5, 200, "トマトをファミレスまで", GetColor(255, 255, 255), font_handle[2]);
+				DrawStringToHandle(window.x + 5, 220, "届けられればクリア！！", GetColor(255, 255, 255), font_handle[2]);
+				DrawStringToHandle(window.x + 5, 240, "邪魔する奴には・・・", GetColor(255, 255, 255), font_handle[2]);
+				DrawStringToHandle(window.x + 35, 280, "トマシュー！", GetColor(255, 255, 255), font_handle[0]);
 				break;
 			default:
 				break;

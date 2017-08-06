@@ -123,6 +123,12 @@ void GameClearInit();
 void GameClearUpdate();
 void GameClearDraw();
 
+void RecordInit();
+void RecordUpdate();
+void RecordDraw();
+
+//６日エッグ変更
+void LoadMaxScore();
 
 //int Lerp(int,int,int,int,int);
 
@@ -183,12 +189,13 @@ extern int const TITLE;
 extern int const MAIN;
 extern int const GAMEOVER;
 extern int const CLEAR;
+extern int const RECORD;
 extern int scene;
 extern bool is_exit;
 
 extern int total_distance;
-//30日エッグ変更
 extern int length;     //距離
+extern int max_score;
 extern double timer;
 
 /*----------FPS関連-----------------*/
@@ -204,4 +211,4 @@ extern bool last_stage;
 extern int now_wave;
 
 //font関連
-extern int FontHandle[3];
+extern int font_handle[4];

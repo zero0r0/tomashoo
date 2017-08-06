@@ -23,6 +23,7 @@ int const TITLE = 0;
 int const MAIN = 1;
 int const GAMEOVER = 2;
 int const CLEAR = 3;
+int const RECORD = 4;
 
 bool is_clear = false;
 bool is_exit = false;
@@ -68,7 +69,7 @@ int tubure_se;
 int nageru_se;
 
 //フォント
-int FontHandle[3];
+int font_handle[4];
 
 /*----------FPS関連-----------------*/
 
@@ -110,8 +111,9 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 	基本的な設定はどのゲームでもほぼコピペなので、
 	意味はあまり気にしなくておっけー
 	*/
+	SetOutApplicationLogValidFlag(false);	//logdateはなし
 	ChangeWindowMode(TRUE);					//ウィンドウモードにする
-	SetMainWindowText("テストゲーム");		//ウィンドウのタイトルを変更する
+	SetMainWindowText("トマシュー！");		//ウィンドウのタイトルを変更する
 	SetWindowSizeChangeEnableFlag(FALSE);
 	SetGraphMode(WINDOW_XSIZE, WINDOW_YSIZE, 32);				//ウィンドウのサイズを640x480にする
 	SetWindowSizeExtendRate(1);
@@ -122,14 +124,15 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 
 	ChangeFontType(DX_FONTTYPE_ANTIALIASING_8X8);  //フォントの設定
 	//SetFontSize(18);
-	FontHandle[0] = CreateFontToHandle(NULL, 14, -1);
-	FontHandle[1] = CreateFontToHandle(NULL, 10, 8);
-	FontHandle[2] = CreateFontToHandle(NULL, 12, -1);
+	font_handle[0] = CreateFontToHandle(NULL, 14, -1);
+	font_handle[1] = CreateFontToHandle(NULL, 10, 8);
+	font_handle[2] = CreateFontToHandle(NULL, 12, -1);
+	font_handle[3] = CreateFontToHandle(NULL, 50, -1);
 
 	/*----------------↑基本的な設定----------------------*/
 
 	//ゲームの情報いろいろ
-	int score;
+	/*int score;
 	int max_score = 0;
 
 	FILE* rf;
@@ -139,11 +142,12 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 	if (rf != NULL) {
 		fread(&max_score, sizeof(int), 1, rf);
 		fclose(rf);	//ファイルを閉じる
-	}
+	}*/
 	
 	LoadGraphicAll();
 	LoadSoundAll();
 
+	LoadMaxScore();
 	scene = TITLE;
 	TitleInit();
 
@@ -170,6 +174,10 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 			case CLEAR:
 				GameClearUpdate();
 				GameClearDraw();
+				break;
+			case RECORD:
+				RecordUpdate();
+				RecordDraw();
 				break;
 			default:
 				break;
@@ -324,13 +332,27 @@ void LoadSoundAll() {
 	gameover_bgm[0] = LoadSoundMem("Data/gameobera.ogg");
 	gameover_bgm[1] = LoadSoundMem("Data/gameobera2.ogg");
 	title_bgm = LoadSoundMem("Data/title.ogg");
-
+	
+	//bgm 音量の設定
+	ChangeVolumeSoundMem(255 * 80 / 100, stage_bgm[0]);
+	ChangeVolumeSoundMem(255 * 80 / 100, stage_bgm[1]);
+	ChangeVolumeSoundMem(255 * 80 / 100, gameover_bgm[0]);
+	ChangeVolumeSoundMem(255 * 80 / 100, gameover_bgm[1]);
+	ChangeVolumeSoundMem(255 * 80 / 100, title_bgm);
+	
 	warning_se = LoadSoundMem("Data/warning_se.ogg");
 	crash_se = LoadSoundMem("Data/crash_se.ogg");
 	get_se = LoadSoundMem("Data/get_se.ogg");
-
 	tubure_se = LoadSoundMem("Data/tubure.ogg");
 	nageru_se = LoadSoundMem("Data/nageru.ogg");
+
+	//Se 音量の設定
+	ChangeVolumeSoundMem(255 * 82 / 100, warning_se);
+	ChangeVolumeSoundMem(255 * 82 / 100, crash_se);
+	ChangeVolumeSoundMem(255 * 82 / 100, get_se);
+	ChangeVolumeSoundMem(255 * 82 / 100, tubure_se);
+	ChangeVolumeSoundMem(255 * 82 / 100, nageru_se);
+
 }
 
 void DeleteSoundAll() {

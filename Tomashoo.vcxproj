@@ -170,6 +170,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Record.cpp" />
     <ClCompile Include="Shot.cpp" />
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
