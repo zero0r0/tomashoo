@@ -64,8 +64,8 @@ void ShotUpdate() {
 				shot[j].is_active = false;
 				for (int k = 0; k < MAX_TOMATO; k++) {
 					if (!tomato_effect[k].is_used) {
-						tomato_effect[k].x = enemy[i].x;
-						tomato_effect[k].y = enemy[i].y;
+						tomato_effect[k].x = shot[j].x;
+						tomato_effect[k].y = shot[j].y;
 						tomato_effect[k].is_used = true;
 						break;
 					}

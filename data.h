@@ -108,6 +108,8 @@ void TitleInit();
 void TitleUpdata();
 void TitleDraw();
 void TitleExit();
+bool WindowOpen();
+bool WindowClose();
 
 void MainGameInit();
 void MainGameUpdate();
@@ -158,6 +160,8 @@ extern int title_botton_graphic[3];
 extern int title_tomato_graphic[2];
 extern int title_conbea_graphic;
 extern int title_pushed_tomato_graphic;
+extern int title_description_window_graphic[6];
+extern int title_desctiption_graphic[3];
 
 //サウンド系
 extern int stage_bgm[2];
@@ -198,3 +202,6 @@ extern const int FPS;	//設定したFPS
 extern bool is_clear;
 extern bool last_stage;
 extern int now_wave;
+
+//font関連
+extern int FontHandle[3];

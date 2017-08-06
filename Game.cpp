@@ -53,6 +53,8 @@ int title_botton_graphic[3];
 int title_tomato_graphic[2];
 int title_conbea_graphic;
 int title_pushed_tomato_graphic;
+int title_description_window_graphic[6];
+int title_desctiption_graphic[3];
 
 //サウンド系
 int stage_bgm[2];
@@ -64,6 +66,9 @@ int warning_se;
 int get_se;
 int tubure_se;
 int nageru_se;
+
+//フォント
+int FontHandle[3];
 
 /*----------FPS関連-----------------*/
 
@@ -116,7 +121,10 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 	SetDrawScreen(DX_SCREEN_BACK);			//描画対象を裏画面にする
 
 	ChangeFontType(DX_FONTTYPE_ANTIALIASING_8X8);  //フォントの設定
-	SetFontSize(18);
+	//SetFontSize(18);
+	FontHandle[0] = CreateFontToHandle(NULL, 14, -1);
+	FontHandle[1] = CreateFontToHandle(NULL, 10, 8);
+	FontHandle[2] = CreateFontToHandle(NULL, 12, -1);
 
 	/*----------------↑基本的な設定----------------------*/
 
@@ -253,6 +261,11 @@ void LoadGraphicAll() {
 
 	title_pushed_tomato_graphic = LoadGraph("Data/pushed_tomato.png");
 	title_conbea_graphic = LoadGraph("Data/conveyor.png");
+
+	LoadDivGraph("Data/window.png", 6, 6, 1, 160, 320, title_description_window_graphic);
+	title_desctiption_graphic[0] = LoadGraph("Data/page1.png");
+	title_desctiption_graphic[1] = LoadGraph("Data/page2.png");
+	title_desctiption_graphic[2] = LoadGraph("Data/page3.png");
 }
 
 void DeleteGraphicAll() {

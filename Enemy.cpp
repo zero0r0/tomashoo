@@ -98,12 +98,18 @@ void EnemyUpdate() {
 					enemy[i].is_dead = true;
 			}
 			if (enemy[i].type == 3) {
-				enemy[i].x = 300 + sin(PI * 2 / 240 * sin_count) * enemy[i].move_x;
-				sin_count++;
-				if (0 > enemy[i].y) {
+				if (enemy[i].y_size > enemy[i].y) {
 					enemy[i].is_dead = true;
 					enemy[i].x = -100;
 					enemy[i].y = -100;
+				}
+				else if (background[0].now_stage == 3 && enemy[i].y <= background[0].y + 1330) {
+					enemy[i].move_y = 0;
+					enemy[i].move_x = 0;
+				}
+				else {
+					enemy[i].x = 300 + sin(PI * 2 / 240 * sin_count) * enemy[i].move_x;
+					sin_count++;
 				}
 			}
 			else
