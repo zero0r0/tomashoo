@@ -48,7 +48,7 @@ void RecordDraw() {
 	//	DrawGraph(0, 0, gameclear_graphic, true);
 	//}
 	//else {
-	DrawGraph(0, 0, gameover_graphic[0], true);
+	DrawGraph(0, 0, record_graphic, true);
 	//}
 	DrawBox(b_x, b_y, b_x + b_size_x, b_y + b_size_y, GetColor(255, 255, 255), true);
 

@@ -9,6 +9,9 @@ int button_select_num;
 int bright;
 int alph;
 
+
+
+
 typedef struct {
 	int x, y;
 	int state;
@@ -65,6 +68,18 @@ void TitleInit() {
 //タイトル時に更新する処理を書く
 void TitleUpdata() {
 	int anim_speed = 5;
+	/*
+	if (key_a > 0)
+		x--;
+	if (key_d > 0)
+		x++;
+	if (key_w > 0)
+		y++;
+	if (key_s > 0)
+		y--;
+	if (key_x > 0)
+		scale++;
+	*/
 
 	switch (title_state%6){
 		//画面を明るくして、タイトルロゴをそろえる状態
@@ -227,8 +242,11 @@ void TitleDraw() {
 	DrawGraph(title_tomato_label.x, title_tomato_label.y, title_tomato_graphic[title_tomato_label.state % 2], true);
 	DrawGraph(window.x, window.y,title_description_window_graphic[window.anim_state%6],true);
 	if (window.anim_state == 5 && window.page_flick_state%3 == 0) {
-		DrawGraph(window.x + 20, window.y + 10, title_desctiption_graphic[window.page%3], true);
-
+		DrawGraph(window.x + 20, window.y + 12, title_desctiption_graphic[window.page%3], true);
+		int x = 560, y1 = 310, y2 = 10;
+		int scale = 10;
+		DrawTriangle(x, y1 + scale, x - scale, y1, x + scale, y1, GetColor(255, 0, 0), TRUE);
+		DrawTriangle(x, y2 - scale, x - scale, y2, x + scale, y2, GetColor(255, 0, 0), TRUE);
 		switch (window.page%3)
 		{
 			case 0:
@@ -265,5 +283,5 @@ void TitleDraw() {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alph);		//ブレンドモードをα(128/255)に設定
 	DrawBox(0, 0, 640, 480, GetColor(255, 255, 255), TRUE);  //画面全体に白い四角形を描画
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		//ブレンドモードをオフ
-	//DrawFormatString(100, 100, GetColor(255, 255, 255), "%d %d %d", conveyor[0].x, conveyor[1].x, conveyor[2].x);
+	//DrawFormatString(100, 100, GetColor(0,0,0), "%d %d %d", x,y,scale);
 }

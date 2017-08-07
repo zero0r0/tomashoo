@@ -57,6 +57,8 @@ int title_pushed_tomato_graphic;
 int title_description_window_graphic[6];
 int title_desctiption_graphic[3];
 
+int record_graphic;
+
 //ƒTƒEƒ“ƒhŒn
 int stage_bgm[2];
 int gameover_bgm[2];
@@ -93,9 +95,9 @@ bool Update() {
 	return true;
 }
 
-void Draw() {
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "%.1f", mFps);
-}
+//void Draw() {
+//	DrawFormatString(0, 0, GetColor(255, 255, 255), "%.1f", mFps);
+//}
 
 void Wait() {
 	int tookTime = GetNowCount() - mStartTime;	//‚©‚©‚Á‚½ŽžŠÔ
@@ -182,7 +184,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 			default:
 				break;
 		}
-		Draw();
+		//Draw();
 		ScreenFlip();
 		Wait();
 	}
@@ -274,6 +276,8 @@ void LoadGraphicAll() {
 	title_desctiption_graphic[0] = LoadGraph("Data/page1.png");
 	title_desctiption_graphic[1] = LoadGraph("Data/page2.png");
 	title_desctiption_graphic[2] = LoadGraph("Data/page3.png");
+
+	record_graphic = LoadGraph("Data/bg_score.png");
 }
 
 void DeleteGraphicAll() {

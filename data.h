@@ -169,6 +169,8 @@ extern int title_pushed_tomato_graphic;
 extern int title_description_window_graphic[6];
 extern int title_desctiption_graphic[3];
 
+extern int record_graphic;
+
 //ƒTƒEƒ“ƒhŒn
 extern int stage_bgm[2];
 extern int gameover_bgm[2];
