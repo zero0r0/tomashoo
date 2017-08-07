@@ -4,5 +4,7 @@
 ‰Ÿ‚µ‚Ä‚¢‚éŠÔ‚Í’l‚ª1‚¸‚Â‘‚¦‚Ä‚¢‚­B—£‚·‚Æ0‚É‚È‚éB
 */
 extern int key_z, key_up, key_down, key_left , key_right;
+extern int key_a, key_s,key_w, key_d,key_x;
+
 
 void KeyUpdate();

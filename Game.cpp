@@ -6,23 +6,106 @@
 #define WINDOW_YSIZE 480
 
 
-void TestMessage();		//関数のプロトタイプ宣言
 void LoadGraphicAll();
+void DeleteGraphicAll();
+void LoadSoundAll();
+void DeleteSoundAll();
+
 
 Player player;
 Shot shot[MAX_TOMATO];
+Item item[MAX_TOMATO];
+Enemy enemy[MAX_ENEMY];
+Background background[2];
 
-int mode;
+int scene;
 int const TITLE = 0;
 int const MAIN = 1;
 int const GAMEOVER = 2;
+int const CLEAR = 3;
+int const RECORD = 4;
+
+bool is_clear = false;
+bool is_exit = false;
+int weather_number;
 
 //グラフィック系
 int shot_graphic;
-int tomato_graphic;
+int tomato_item_graphic[2];
 int speed_meter_graphic;
-int backbround_graphic[STAGE_NUM];
-int karasu_graphic;
+int speed_needle_graphic;
+int background_graphic[MAX_STAGE];
+int enemy_graphic[MAX_ENEMY_TYPE][ENEMY_ANIMETION_NUM];
+int weather_graphic[3];
+int font_num_graphic[10];
+int font_tomato_graphic;
+int shasen_graphic;
+int tomato_effect_graphic[2];
+int sand_effect_graphic[2];
+int gameover_graphic[4];
+//25日エッグ変更
+int font_timeup_graphic[4];
+int font_length_graphic[2];
+int gameclear_graphic;
+
+//タイトルで使うグラフィック系
+int titlelogo_graphic[3];
+int title_botton_graphic[3];
+int title_tomato_graphic[2];
+int title_conbea_graphic;
+int title_pushed_tomato_graphic;
+int title_description_window_graphic[6];
+int title_desctiption_graphic[3];
+
+int record_graphic;
+
+//サウンド系
+int stage_bgm[2];
+int gameover_bgm[2];
+int title_bgm;
+
+int crash_se;
+int warning_se;
+int get_se;
+int tubure_se;
+int nageru_se;
+
+//フォント
+int font_handle[4];
+
+/*----------FPS関連-----------------*/
+
+int mStartTime;      //測定開始時刻
+int mCount;          //カウンタ
+float mFps;          //fps
+const int N = 60;	//平均を取るサンプル数
+const int FPS = 60;	//設定したFPS
+
+bool Update() {
+	if (mCount == 0) { //1フレーム目なら時刻を記憶
+		mStartTime = GetNowCount();
+	}
+	if (mCount == N) { //60フレーム目なら平均を計算する
+		int t = GetNowCount();
+		mFps = 1000.f / ((t - mStartTime) / (float)N);
+		mCount = 0;
+		mStartTime = t;
+	}
+	mCount++;
+	return true;
+}
+
+//void Draw() {
+//	DrawFormatString(0, 0, GetColor(255, 255, 255), "%.1f", mFps);
+//}
+
+void Wait() {
+	int tookTime = GetNowCount() - mStartTime;	//かかった時間
+	int waitTime = mCount * 1000 / FPS - tookTime;	//待つべき時間
+	if (waitTime > 0) {
+		Sleep(waitTime);	//待機
+	}
+}
 
 int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 
@@ -30,8 +113,9 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 	基本的な設定はどのゲームでもほぼコピペなので、
 	意味はあまり気にしなくておっけー
 	*/
+	SetOutApplicationLogValidFlag(false);	//logdateはなし
 	ChangeWindowMode(TRUE);					//ウィンドウモードにする
-	SetMainWindowText("テストゲーム");		//ウィンドウのタイトルを変更する
+	SetMainWindowText("トマシュー！");		//ウィンドウのタイトルを変更する
 	SetWindowSizeChangeEnableFlag(FALSE);
 	SetGraphMode(WINDOW_XSIZE, WINDOW_YSIZE, 32);				//ウィンドウのサイズを640x480にする
 	SetWindowSizeExtendRate(1);
@@ -41,16 +125,16 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 	SetDrawScreen(DX_SCREEN_BACK);			//描画対象を裏画面にする
 
 	ChangeFontType(DX_FONTTYPE_ANTIALIASING_8X8);  //フォントの設定
-	SetFontSize(18);
+	//SetFontSize(18);
+	font_handle[0] = CreateFontToHandle(NULL, 14, -1);
+	font_handle[1] = CreateFontToHandle(NULL, 10, 8);
+	font_handle[2] = CreateFontToHandle(NULL, 12, -1);
+	font_handle[3] = CreateFontToHandle(NULL, 50, -1);
 
 	/*----------------↑基本的な設定----------------------*/
 
-	//背景の情報いろいろ
-	int back_y;
-	int back_g = LoadGraph("Data/back.bmp");
-
 	//ゲームの情報いろいろ
-	int score;
+	/*int score;
 	int max_score = 0;
 
 	FILE* rf;
@@ -60,217 +144,224 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE hp, LPSTR lpC, int nC) {
 	if (rf != NULL) {
 		fread(&max_score, sizeof(int), 1, rf);
 		fclose(rf);	//ファイルを閉じる
-	}
+	}*/
+	
+	LoadGraphicAll();
+	LoadSoundAll();
 
-	mode = TITLE;
+	LoadMaxScore();
+	scene = TITLE;
 	TitleInit();
 
 	//メインループ
-	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0) {
+	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0 && !is_exit) {
+		Update();
 		ClearDrawScreen();
 		KeyUpdate();
 		//--------------ゲームの処理をする-----------------
-		//変数「mode」が0ならば、タイトル画面の処理をする
-		switch (mode) {
-		case TITLE:
-			TitleUpdata();
-			TitleDraw();
-			break;
-		case MAIN:
-			MainGameUpdate();
-			MainGameDraw();
-			break;
-		case GAMEOVER:
-			break;
-		default:
-			break;
+		//変数「scene」が0ならば、タイトル画面の処理をする
+		switch (scene) {
+			case TITLE:
+				TitleUpdata();
+				TitleDraw();
+				break;
+			case MAIN:
+				MainGameUpdate();
+				MainGameDraw();
+				break;
+			case GAMEOVER:
+				GameoverUpdate();
+				GameoverDraw();
+				break;
+			case CLEAR:
+				GameClearUpdate();
+				GameClearDraw();
+				break;
+			case RECORD:
+				RecordUpdate();
+				RecordDraw();
+				break;
+			default:
+				break;
 		}
-		/*
-			
-
-			//トリガーを-1する
-			shot_trigger--;
-			//Zキーが押されていて、かつトリガーが0以下だったら弾丸を発射する
-			if (key_z > 0 && shot_trigger <= 0) {
-				//使用されていない弾丸を探し、見つけたら情報をセットして抜け出す
-				for (i = 0; i < MAX_SHOT; i++) {
-					if (shot_life[i] == 0) {
-						shot_life[i] = 1;
-						shot_xsize[i] = 20;
-						shot_ysize[i] = 20;
-						shot_x[i] = player_x + player_xsize / 2 - shot_xsize[i] / 2;
-						shot_y[i] = player_y;
-
-						//トリガーを設定
-						shot_trigger = 10;
-						break;		//ループから脱出
-					}
-				}
-			}
-			//乱数を使用して、1/20の確率で敵を出現させる
-			//※1ループにつき1/20、60ループ/1秒のため、だいたい敵が1秒で3体出る計算となる
-			if (GetRand(20) == 0) {
-				//使用されていない敵を探し、見つけたら情報をセットして抜け出す
-				for (i = 0; i < MAX_ENEMY; i++) {
-					if (enemy_life[i] == 0) {
-						enemy_life[i] = 1;
-						enemy_xsize[i] = 40;
-						enemy_ysize[i] = 40;
-						enemy_x[i] = GetRand(440 - enemy_xsize[i]);
-						enemy_y[i] = 0 - enemy_ysize[i];
-
-						break;
-					}
-				}
-			}
-
-			//登場している弾丸を動かす
-			for (i = 0; i < MAX_SHOT; i++) {
-				if (shot_life[i] > 0) {
-					shot_y[i] -= 10;
-					//弾丸が画面外に出たら削除する
-					if (shot_y[i] < 0 - shot_ysize[i])
-						shot_life[i] = 0;
-				}
-			}
-			//登場している敵を動かす
-			for (i = 0; i < MAX_ENEMY; i++) {
-				if (enemy_life[i] > 0) {
-					enemy_y[i] += 3;
-					//敵が画面外に出たら削除する
-					if (enemy_y[i] > 480)
-						enemy_life[i] = 0;
-				}
-			}
-
-			//背景を移動させる
-			back_y += 5;
-			if (back_y >= 2400)
-				back_y -= 2400;	//背景のループ
-
-								//敵と弾丸の当たり判定
-			for (i = 0; i < MAX_SHOT; i++) {
-				if (shot_life[i] > 0) {
-					for (j = 0; j < MAX_ENEMY; j++) {
-						if (enemy_life[j] > 0) {
-							if (shot_x[i] <= enemy_x[j] + enemy_xsize[j] && shot_x[i] + shot_xsize[i] >= enemy_x[j]) {
-								if (shot_y[i] <= enemy_y[j] + enemy_ysize[j] && shot_y[i] + shot_ysize[i] >= enemy_y[j]) {
-									//当たっていたら、弾丸を削除して敵の体力を1減らす
-									shot_life[i] = 0;
-									enemy_life[j]--;
-									//敵を倒したらスコアを増やす
-									if (enemy_life[j] == 0)
-										score += 100;
-								}
-							}
-						}
-					}
-				}
-			}
-
-			//プレイヤーのセーフタイムを1減らす
-			if (player_safetime > 0)
-				player_safetime--;
-			//敵とプレイヤーの当たり判定
-			if (player_safetime == 0) {
-				for (i = 0; i < MAX_ENEMY; i++) {
-					if (enemy_life[i] > 0) {
-						if (enemy_x[i] <= player_x + player_xsize && enemy_x[i] + enemy_xsize[i] >= player_x) {
-							if (enemy_y[i] <= player_y + player_ysize && enemy_y[i] + enemy_ysize[i] >= player_y) {
-								//プレイヤーの体力を1減らし、1秒間ダメージを受けないようにする
-								player_life--;
-								player_safetime = 60;
-							}
-						}
-					}
-				}
-			}
-
-			//プレイヤーの体力が0以下になったらゲームオーバー
-			if (player_life <= 0)
-				mode = 2;
-		}
-		//変数「mode」が2ならば、ゲームオーバ―画面の処理をする
-		else if (mode == GAMEOVER) {
-			//Zキーが押されたらタイトル画面に戻る
-			if (key_z == 1) {
-				mode = 0;
-				//もし今回のスコアが最大スコアより高ければ、最大スコアを更新
-				if (score > max_score)
-					max_score = score;
-				FILE *wf;
-				fopen_s(&wf, "Data/max_score.txt", "w");
-				if (wf != NULL) {
-					fwrite(&max_score, sizeof(int), 1, wf);
-					fclose(wf);
-				}
-			}
-		}
-
-		//--------------ゲームの描画をする-----------------
-		//変数「mode」が0ならば、タイトル画面の描画をする
-		if (mode == 0) {
-			//文字を描画する
-			DrawString(20, 20, "タイトル画面", GetColor(255, 255, 255));
-			DrawFormatString(20, 60, GetColor(255, 255, 255), "最大スコア：%d", max_score);
-		}
-		//変数「mode」が1ならば、メイン画面の描画をする
-		else if (mode == 1) {
-			//背景を描画
-			DrawGraph(0, back_y, back_g, TRUE);
-			DrawGraph(0, back_y - 2400, back_g, TRUE);
-
-			//弾丸を描画
-			for (i = 0; i < MAX_SHOT; i++) {
-				if (shot_life[i] > 0) {
-					DrawGraph(shot_x[i], shot_y[i], shot_g, TRUE);
-				}
-			}
-			//敵を描画
-			for (i = 0; i < MAX_ENEMY; i++) {
-				if (enemy_life[i] > 0) {
-					DrawGraph(enemy_x[i], enemy_y[i], enemy_g, TRUE);
-				}
-			}
-			
-
-			//淵を描画
-			DrawBox(0, 0, 440, 480, GetColor(0, 0, 255), FALSE);
-
-			DrawString(460, 20, "score", GetColor(255, 255, 255));
-			DrawFormatString(480, 40, GetColor(255, 255, 255), "%d", score);
-			DrawString(460, 100, "life", GetColor(255, 255, 255));
-			for (i = 0; i < player_life; i++) {
-				DrawGraph(480 + i * 25, 120, plife_g, TRUE);
-			}
-			//TestMessage();
-		}
-		//変数「mode」が2ならば、ゲームオーバ―画面の描画をする
-		else if (mode == 2) {
-			DrawString(20, 20, "Game Over", GetColor(255, 255, 255));
-			DrawFormatString(20, 100, GetColor(255, 255, 255), "Total Score : %d", score);
-		}*/
-
+		//Draw();
 		ScreenFlip();
+		Wait();
 	}
+	//DeleteGraphicAll();
+	InitGraph();
+	InitSoundMem();
+	//DeleteSoundAll();
 
 	DxLib_End();
 	return 0;
 }
 
 void LoadGraphicAll() {
-	LoadDivGraph("Data/pc01.png",2,2,1,48,48, player.graphic);
-	player.life_graphic = LoadGraph("Data/life.bmp");
-	tomato_graphic = LoadGraph("Data/tomato.png");
+	//30日エッグ変更
+	LoadDivGraph("Data/pc01.png", 2, 2, 1, 48, 48, player.graphic[0]);
+	LoadDivGraph("Data/pc02.png", 2, 2, 1, 48, 48, player.graphic[1]);
+	LoadDivGraph("Data/en01.png", 2, 2, 1, 48, 48, enemy_graphic[0]);
+	LoadDivGraph("Data/en02.png", 2, 2, 1, 48, 48, enemy_graphic[1]);
+	LoadDivGraph("Data/en03.png", 2, 2, 1, 48, 48, enemy_graphic[2]);
+	LoadDivGraph("Data/en04.png", 2, 2, 1, 48, 48, enemy_graphic[3]);
+	LoadDivGraph("Data/en05c.png", 2, 2, 1, 48, 48, enemy_graphic[4]);
+	LoadDivGraph("Data/en05l.png", 2, 2, 1, 48, 48, enemy_graphic[5]);
+	LoadDivGraph("Data/en05r.png", 2, 2, 1, 48, 48, enemy_graphic[6]);
+	
+	for (int i = 0; i < 2; i++) {
+		enemy_graphic[7][i] = LoadGraph("Data/en06b.png");
+		enemy_graphic[8][i] = LoadGraph("Data/en06f.png");
+		enemy_graphic[9][i] = LoadGraph("Data/en06r.png");
+		enemy_graphic[10][i] = LoadGraph("Data/en06l.png");
+	}
 
+	//25日エッグ変更
+	font_timeup_graphic[0] = LoadGraph("Data/font.timeup.png");
+	font_timeup_graphic[1] = LoadGraph("Data/font.made.png");
+	font_timeup_graphic[2] = LoadGraph("Data/font.ato.png");
+	font_timeup_graphic[3] = LoadGraph("Data/font_hun.png");
+	//
+	
+	shot_graphic = LoadGraph("Data/bl01.png");
+	background_graphic[0] = LoadGraph("Data/inaka.png");
+	background_graphic[1] = LoadGraph("Data/hatake.png");
+	background_graphic[2] = LoadGraph("Data/road.png");
+	background_graphic[3] = LoadGraph("Data/families.png");
+	speed_meter_graphic = LoadGraph("Data/speed_meter.png");
+	speed_needle_graphic = LoadGraph("Data/speed_needle.png");
+	weather_graphic[0] = LoadGraph("Data/weather_rainy.png");
+	weather_graphic[1] = LoadGraph("Data/weather_cloudy.png");
+	weather_graphic[2] = LoadGraph("Data/weather_sunny.png");
+	font_num_graphic[0] = LoadGraph("Data/font0.png");
+	font_num_graphic[1] = LoadGraph("Data/font1.png");
+	font_num_graphic[2] = LoadGraph("Data/font2.png");
+	font_num_graphic[3] = LoadGraph("Data/font3.png");
+	font_num_graphic[4] = LoadGraph("Data/font4.png");
+	font_num_graphic[5] = LoadGraph("Data/font5.png");
+	font_num_graphic[6] = LoadGraph("Data/font6.png");
+	font_num_graphic[7] = LoadGraph("Data/font7.png");
+	font_num_graphic[8] = LoadGraph("Data/font8.png");
+	font_num_graphic[9] = LoadGraph("Data/font9.png");
+	font_tomato_graphic = LoadGraph("Data/font.tomato.png");
+	shasen_graphic = LoadGraph("Data/shasen.png");
+	font_length_graphic[0] = LoadGraph("Data/font.nokori.png");
+	//30日エッグ変更
+	font_length_graphic[1] = LoadGraph("Data/font.km.png");
+	LoadDivGraph("Data/it01.png", 2, 2, 1, 48, 48, tomato_item_graphic);
+	LoadDivGraph("Data/ef02.png", 2, 2, 1, 48, 48, sand_effect_graphic);
+	LoadDivGraph("Data/ef01.png", 2, 2, 1, 48, 48, tomato_effect_graphic);
+
+	gameover_graphic[0] = LoadGraph("Data/gameover1.png");
+	gameover_graphic[1] = LoadGraph("Data/gameover2.png");
+	gameover_graphic[2] = LoadGraph("Data/gameover3.png");
+	gameover_graphic[3] = LoadGraph("Data/gameover4.png");
+	gameclear_graphic = LoadGraph("Data/gameclear.png");
+
+	titlelogo_graphic[0] = LoadGraph("Data/font_to.png");
+	titlelogo_graphic[1] = LoadGraph("Data/font_ma.png");
+	titlelogo_graphic[2] = LoadGraph("Data/font_shu.png");
+	
+	title_botton_graphic[0] = LoadGraph("Data/botan_start.png");
+	title_botton_graphic[1] = LoadGraph("Data/botan_record.png");
+	title_botton_graphic[2] = LoadGraph("Data/botan_exit.png");
+
+	title_tomato_graphic[0] = LoadGraph("Data/tomato.png");
+	title_tomato_graphic[1] = LoadGraph("Data/tubureta_tomato.png");
+
+	title_pushed_tomato_graphic = LoadGraph("Data/pushed_tomato.png");
+	title_conbea_graphic = LoadGraph("Data/conveyor.png");
+
+	LoadDivGraph("Data/window.png", 6, 6, 1, 160, 320, title_description_window_graphic);
+	title_desctiption_graphic[0] = LoadGraph("Data/page1.png");
+	title_desctiption_graphic[1] = LoadGraph("Data/page2.png");
+	title_desctiption_graphic[2] = LoadGraph("Data/page3.png");
+
+	record_graphic = LoadGraph("Data/bg_score.png");
 }
 
 void DeleteGraphicAll() {
-	DeleteGraph(player.graphic[0]);
-	DeleteGraph(player.graphic[1]);
-	DeleteGraph(player.life_graphic);
+	//DeleteGraph(player.graphic[0]);
+	//DeleteGraph(player.graphic[1]);
+	// 30日エッグ変更
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 2; j++) {
+			DeleteGraph(player.graphic[i][j]);
+		}
+	}
+	DeleteGraph(shot_graphic);
+	for(int i = 0; i < MAX_STAGE;i++)
+		DeleteGraph(background_graphic[i]);
+	for (int i = 0; i < MAX_ENEMY_TYPE; i++) {
+		for (int j = 0; j < ENEMY_ANIMETION_NUM; j++) {
+			DeleteGraph(enemy_graphic[i][j]);
+		}
+	}
+	for (int i = 0; i < 3; i++) {
+		DeleteGraph(weather_graphic[i]);
+	}
+
+	for (int i = 0; i < 10; i++) {
+		DeleteGraph(font_num_graphic[i]);
+	}
+
+	for (int i = 0; i < 4; i++) {
+		DeleteGraph(font_timeup_graphic[i]);
+	}
+
+	for (int i = 0; i < 1; i++) {
+		DeleteGraph(font_length_graphic[i]);
+	}
+
+	for (int i = 0; i < 2; i++) {
+		DeleteGraph(tomato_effect_graphic[i]);
+		DeleteGraph(tomato_item_graphic[i]);
+		DeleteGraph(sand_effect_graphic[i]);
+
+	}
+
+	//30日エッグ変更
+	for (int i = 0; i < 2; i++) {
+		DeleteGraph(font_length_graphic[i]);
+	}
+	DeleteGraph(speed_meter_graphic);
+	DeleteGraph(speed_needle_graphic);
+	DeleteGraph(font_tomato_graphic);
+	DeleteGraph(shasen_graphic);
 }
 
-void TestMessage() {
-	DrawString(0, 0, "Shooting Game!!", GetColor(255, 255, 255));
+void LoadSoundAll() {
+	stage_bgm[0] = LoadSoundMem("Data/stagebgm0.ogg");
+	stage_bgm[1] = LoadSoundMem("Data/stagebgm1.ogg");
+	gameover_bgm[0] = LoadSoundMem("Data/gameobera.ogg");
+	gameover_bgm[1] = LoadSoundMem("Data/gameobera2.ogg");
+	title_bgm = LoadSoundMem("Data/title.ogg");
+	
+	//bgm 音量の設定
+	ChangeVolumeSoundMem(255 * 80 / 100, stage_bgm[0]);
+	ChangeVolumeSoundMem(255 * 80 / 100, stage_bgm[1]);
+	ChangeVolumeSoundMem(255 * 80 / 100, gameover_bgm[0]);
+	ChangeVolumeSoundMem(255 * 80 / 100, gameover_bgm[1]);
+	ChangeVolumeSoundMem(255 * 80 / 100, title_bgm);
+	
+	warning_se = LoadSoundMem("Data/warning_se.ogg");
+	crash_se = LoadSoundMem("Data/crash_se.ogg");
+	get_se = LoadSoundMem("Data/get_se.ogg");
+	tubure_se = LoadSoundMem("Data/tubure.ogg");
+	nageru_se = LoadSoundMem("Data/nageru.ogg");
+
+	//Se 音量の設定
+	ChangeVolumeSoundMem(255 * 82 / 100, warning_se);
+	ChangeVolumeSoundMem(255 * 82 / 100, crash_se);
+	ChangeVolumeSoundMem(255 * 82 / 100, get_se);
+	ChangeVolumeSoundMem(255 * 82 / 100, tubure_se);
+	ChangeVolumeSoundMem(255 * 82 / 100, nageru_se);
+
+}
+
+void DeleteSoundAll() {
+	for (int i = 0; i < 2; i++) {
+		DeleteSoundMem(stage_bgm[i]);
+		DeleteSoundMem(gameover_bgm[i]);
+	}
 }
