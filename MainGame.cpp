@@ -27,11 +27,16 @@ void MainGameUpdate() {
 		length = (int)((24277 - total_distance) * (1.0 / 242));
 		if (length < 0)
 			length = 0;
-	}else if(player.tomato < 50){
+	}
+	else if (player.tomato == 0) {
 		GameoverInit(1);
 		return;
-	}else if (player.time <= 0) {
+	}
+	else if(player.tomato < 50){
 		GameoverInit(2);
+		return;
+	}else if (player.time <= 0) {
+		GameoverInit(0);
 		return;
 	}else if (is_clear) {
 		GameClearInit();

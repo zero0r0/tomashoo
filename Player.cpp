@@ -48,7 +48,7 @@ void PlayerUpdate() {
 			PlaySoundMem(warning_se, DX_PLAYTYPE_BACK, true);
 	}
 	if (player.time <= 0) {
-		GameoverInit(2);
+		GameoverInit(0);
 		return;
 	}
 	player.fleam_count++;
